@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "macrozone-cmc",
-    "slug": "macrozone-cmc",
+    "slug": "macanthony-charles",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -32,11 +32,26 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      "expo-font",
+      "expo-image",
+      "expo-status-bar",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "8827cc95-7936-455b-a8c5-857710d959c6"
+      }
+    },
+    "owner": "chidindus-team"
   }
 }
