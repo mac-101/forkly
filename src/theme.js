@@ -9,6 +9,7 @@ export const colors = {
   muted: "#8B8B93",
   white: "#FFFFFF",
   star: "#FFB400",
+  transparent: "transparent",
 };
 
 export const radius = { sm: 12, md: 16, lg: 24, pill: 999 };
