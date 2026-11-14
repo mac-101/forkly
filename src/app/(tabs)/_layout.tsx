@@ -1,6 +1,7 @@
-import { View } from "react-native";
 import { Tabs } from "expo-router";
+import { View } from "react-native";
 import { BottomTabBar } from "../../components";
+import { useCartCount } from "../../store";
 
 // key must match the route file name inside (tabs)/
 const TABS = [
@@ -12,13 +13,16 @@ const TABS = [
 ];
 
 export default function TabsLayout() {
+  const cartCount = useCartCount();
+  const tabs = TABS.map((t) => (t.key === "orders" ? { ...t, badge: cartCount } : t));
+
   return (
     <Tabs
       screenOptions={{ headerShown: false }}
       tabBar={({ state, navigation }) => (
         <View style={{ position: "absolute", left: 16, right: 16, bottom: 24 }}>
           <BottomTabBar
-            tabs={TABS}
+            tabs={tabs}
             activeKey={state.routes[state.index].name}
             onChange={(key: string) => navigation.navigate(key)}
           />

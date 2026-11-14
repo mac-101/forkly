@@ -30,9 +30,9 @@ export default function RestaurantScreen() {
   // menu tabs = "All" + every category (no Popular tab, popular has its own section)
   const tabs = restaurant
     ? [
-        { id: "All", count: getItemsByRestaurant(restaurant.id).length },
-        ...getMenuTabs(restaurant.id).filter((t) => t.id !== "Popular"),
-      ]
+      { id: "All", count: getItemsByRestaurant(restaurant.id).length },
+      ...getMenuTabs(restaurant.id).filter((t) => t.id !== "Popular"),
+    ]
     : [];
 
   const scrollRef = useRef(null);
@@ -128,7 +128,7 @@ export default function RestaurantScreen() {
 
       <ActionBar
         onMenuPress={() => scrollRef.current?.scrollTo({ y: menuY - 8, animated: true })}
-        onBookPress={() => {}} // TODO: book a table
+        onBookPress={() => router.push(`/restaurant/${restaurant.id}/book`)}
       />
     </SafeAreaView>
   );

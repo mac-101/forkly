@@ -1,5 +1,5 @@
-import  {PlaceholderScreen}  from "../../components";
+import OrdersScreen from "../../screens/OrdersScreen";
 
-export default function OrdersScreen() {
-  return <PlaceholderScreen title="Orders" />;
+export default function Orders() {
+  return <OrdersScreen />;
 }

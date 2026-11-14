@@ -7,11 +7,13 @@ import { SizePicker, AddOnRow, Stepper, OrderOnlineButton } from "../../../../co
 import { getItemById, ADD_ONS, SIZES, calcUnitPrice, formatPrice } from "../../../../data";
 import { getImage } from "../../../../images";
 import { colors } from "../../../../theme";
+import { useStore } from "../../../../store";
 
 export default function ItemScreen() {
-  const { itemid: itemId } = useLocalSearchParams();
+  const { itemId } = useLocalSearchParams();
   const router = useRouter();
   const item = getItemById(String(itemId));
+  const addToCart = useStore((s) => s.addToCart);
 
   const [size, setSize] = useState("S");
   const [qty, setQty] = useState(1);
@@ -96,7 +98,7 @@ export default function ItemScreen() {
       <OrderOnlineButton
         label={`Add to cart · ${formatPrice(total)}`}
         onPress={() => {
-          // TODO: add { item, size, addOns, qty } to the cart store
+          addToCart({ item, size, addOns, qty });
           router.back();
         }}
       />

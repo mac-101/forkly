@@ -10,6 +10,7 @@ export const DEFAULT_TABS = [
   { key: "menu", label: "Menu", icon: "menu-outline" },
 ];
 
+// tab = { key, label, icon, badge? }
 export default function BottomTabBar({ tabs = DEFAULT_TABS, activeKey, onChange }) {
   return (
     <View style={styles.bar}>
@@ -21,11 +22,18 @@ export default function BottomTabBar({ tabs = DEFAULT_TABS, activeKey, onChange 
             onPress={() => onChange?.(tab.key)}
             style={[styles.tab, active && styles.tabActive]}
           >
-            <Ionicons
-              name={tab.icon}
-              size={22}
-              color={active ? colors.white : colors.muted}
-            />
+            <View>
+              <Ionicons
+                name={tab.icon}
+                size={22}
+                color={active ? colors.white : colors.muted}
+              />
+              {tab.badge > 0 && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{tab.badge > 9 ? "9+" : tab.badge}</Text>
+                </View>
+              )}
+            </View>
             {active && <Text style={styles.label}>{tab.label}</Text>}
           </Pressable>
         );
@@ -57,4 +65,19 @@ const styles = StyleSheet.create({
   },
   tabActive: { backgroundColor: colors.primary, paddingHorizontal: 18 },
   label: { color: colors.white, fontSize: 16, fontWeight: "500" },
+  badge: {
+    position: "absolute",
+    top: -8,
+    right: -10,
+    minWidth: 18,
+    height: 18,
+    paddingHorizontal: 4,
+    borderRadius: 9,
+    backgroundColor: colors.primary,
+    borderWidth: 2,
+    borderColor: colors.white,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  badgeText: { color: colors.white, fontSize: 10, fontWeight: "700" },
 });

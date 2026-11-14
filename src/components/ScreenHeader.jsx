@@ -9,13 +9,17 @@ export default function ScreenHeader({ title, onBack, isFavourite, onToggleFavou
         <Ionicons name="arrow-back" size={22} color={colors.text} />
       </Pressable>
       <Text style={styles.title} numberOfLines={1}>{title}</Text>
-      <Pressable onPress={onToggleFavourite} style={styles.button}>
-        <Ionicons
-          name={isFavourite ? "heart" : "heart-outline"}
-          size={22}
-          color={isFavourite ? colors.primary : colors.text}
-        />
-      </Pressable>
+      {onToggleFavourite ? (
+        <Pressable onPress={onToggleFavourite} style={styles.button}>
+          <Ionicons
+            name={isFavourite ? "heart" : "heart-outline"}
+            size={22}
+            color={isFavourite ? colors.primary : colors.text}
+          />
+        </Pressable>
+      ) : (
+        <View style={{ width: 46 }} />
+      )}
     </View>
   );
 }
