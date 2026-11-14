@@ -1,4 +1,4 @@
-export { default as LocationHeader } from "./LocationHeader";
+export { default as LocationHeader, BrandHeader } from "./LocationHeader";
 export { default as SearchBar } from "./SearchBar";
 export { default as GreetingCard } from "./GreetingCard";
 export { default as CategoryCard } from "./CategoryCard";

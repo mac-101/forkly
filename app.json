@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "macrozone-cmc",
-    "slug": "macanthony-charles",
+    "name": "Forkly",
+    "slug": "forkly",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "macrozonecmc",
+    "scheme": "forkly",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"

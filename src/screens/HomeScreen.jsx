@@ -3,6 +3,7 @@ import { View, Text, ScrollView, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import {
+  BrandHeader,
   LocationHeader,
   GreetingCard,
   CategoryCard,
@@ -28,10 +29,12 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <ScrollView
+        stickyHeaderIndices={[0]}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
+        <BrandHeader />
         <LocationHeader address={USER.location} />
 
         <View style={styles.block}>

@@ -23,7 +23,36 @@ export default function LocationHeader({ address, avatar, onPress }) {
   );
 }
 
+export function BrandHeader() {
+  return (
+    <View style={styles.brandRow}>
+      <View style={styles.brandIcon}>
+        <Ionicons name="restaurant" size={16} color={colors.white} />
+      </View>
+      <Text style={styles.brand}>Forkly</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
+  brandRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: colors.background,
+    zIndex: 1,
+    marginBottom: 12,
+    padding: 10,
+  },
+  brandIcon: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  brand: { fontSize: 22, fontWeight: "700", color: colors.primary },
   container: {
     flexDirection: "row",
     alignItems: "center",
