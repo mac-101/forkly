@@ -2,24 +2,40 @@ import { View, Text, Image, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, radius } from "../theme";
 
-export default function LocationHeader({ address, avatar, onPress }) {
+const initials = (name = "") =>
+  name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+
+export default function LocationHeader({ address, avatar, userName, onPress, onAvatarPress }) {
   return (
-    <Pressable onPress={onPress} style={styles.container}>
-      <View style={styles.iconWrap}>
-        <Ionicons name="location-outline" size={22} color={colors.primary} />
-      </View>
-      <View style={styles.texts}>
-        <Text style={styles.label}>Current Location</Text>
-        <Text style={styles.address} numberOfLines={1}>{address}</Text>
-      </View>
-      {avatar ? (
-        <Image source={avatar} style={styles.avatar} />
-      ) : (
-        <View style={[styles.avatar, styles.avatarFallback]}>
-          <Ionicons name="person" size={22} color={colors.white} />
+    <View>
+      <Pressable onPress={onPress} style={styles.container}>
+        <View style={styles.iconWrap}>
+          <Ionicons name="location-outline" size={22} color={colors.primary} />
         </View>
-      )}
-    </Pressable>
+        <View style={styles.texts}>
+          <Text style={styles.label}>Current Location</Text>
+          <Text style={styles.address} numberOfLines={1}>{address}</Text>
+        </View>
+        <Pressable onPress={onAvatarPress} hitSlop={6}>
+          {avatar ? (
+            <Image source={avatar} style={styles.avatar} />
+          ) : (
+            <View style={[styles.avatar, styles.avatarFallback]}>
+              {initials(userName) ? (
+                <Text style={styles.initials}>{initials(userName)}</Text>
+              ) : (
+                <Ionicons name="person" size={22} color={colors.white} />
+              )}
+            </View>
+          )}
+        </Pressable>
+      </Pressable>
+    </View>
   );
 }
 
@@ -35,7 +51,7 @@ export function BrandHeader() {
 }
 
 const styles = StyleSheet.create({
-  brandRow: {
+   brandRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
@@ -75,6 +91,7 @@ const styles = StyleSheet.create({
   label: { fontSize: 13, color: colors.muted },
   address: { fontSize: 16, fontWeight: "500", color: colors.text },
   avatar: { width: 48, height: 48, borderRadius: 24 },
+  initials: { fontSize: 17, fontWeight: "700", color: colors.white },
   avatarFallback: {
     backgroundColor: colors.primary,
     alignItems: "center",

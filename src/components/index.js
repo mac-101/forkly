@@ -22,3 +22,4 @@ export { default as CartLine } from "./CartLine";
 export { default as OrderCard } from "./OrderCard";
 export { default as ReservationCard } from "./ReservationCard";
 export { default as ReservationNotice } from "./ReservationNotice";
+export { default as Illustration } from "./Illustration";

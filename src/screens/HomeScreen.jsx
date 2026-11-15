@@ -3,19 +3,22 @@ import { View, Text, ScrollView, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import {
-  BrandHeader,
   LocationHeader,
   GreetingCard,
   CategoryCard,
   SectionHeader,
   RestaurantCard,
 } from "../components";
+import { BrandHeader } from "../components";
 import { colors } from "../theme";
+import { useStore } from "../store";
 import { getImage } from "../images";
 import { USER, CATEGORIES, RESTAURANTS, getRestaurantsByCategory } from "../data";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const user = useStore((s) => s.user);
+  const firstName = user?.name?.trim().split(" ")[0] || USER.name;
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
 
@@ -35,11 +38,15 @@ export default function HomeScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <BrandHeader />
-        <LocationHeader address={USER.location} />
+        <LocationHeader
+          address={USER.location}
+          userName={user?.name}
+          onAvatarPress={() => router.navigate("/profile")}
+        />
 
         <View style={styles.block}>
           <GreetingCard
-            name={USER.name}
+            name={firstName}
             searchProps={{
               value: query,
               onChangeText: setQuery,
