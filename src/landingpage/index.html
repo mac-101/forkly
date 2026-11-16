@@ -1,1039 +1,440 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Forkly: order food and book a table</title>
-  <meta name="description"
-    content="Forkly is a React Native food ordering and table booking app, built as a portfolio project.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --red: #DC2626;
-      --blush: #FCE8EA;
-      --ink: #1D1A1A;
-      --mute: #6E6769;
-      --mist: #F6F4F4;
-      --line: #E9E3E3
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0
-    }
-
-    html {
-      scroll-behavior: smooth
-    }
-
-    body {
-      font: 400 17px/1.6 "DM Sans", system-ui, sans-serif;
-      color: var(--ink);
-      background: #fff
-    }
-
-    h1,
-    h2,
-    h3,
-    .brand {
-      font-family: "Bricolage Grotesque", "DM Sans", sans-serif;
-      line-height: 1.1;
-      letter-spacing: -.02em
-    }
-
-    a {
-      color: inherit
-    }
-
-    :focus-visible {
-      outline: 3px solid var(--red);
-      outline-offset: 3px
-    }
-
-    .wrap {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 52px;
-      padding: 0 26px;
-      border-radius: 999px;
-      font: 700 16px "DM Sans", sans-serif;
-      text-decoration: none;
-      border: 2px solid var(--red);
-      cursor: pointer;
-      transition: background .15s, color .15s
-    }
-
-    .btn.fill {
-      background: var(--red);
-      color: #fff
-    }
-
-    .btn.fill:hover {
-      background: #b91c1c;
-      border-color: #b91c1c
-    }
-
-    .btn.line {
-      background: transparent;
-      color: var(--red)
-    }
-
-    .btn.line:hover {
-      background: var(--red);
-      color: #fff
-    }
-
-    .btn.soon {
-      opacity: .55
-    }
-
-    /* nav */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(255, 255, 255, .92);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--line)
-    }
-
-    nav .wrap {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 68px
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--red);
-      text-decoration: none
-    }
-
-    .brand i {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: var(--red);
-      display: grid;
-      place-items: center
-    }
-
-    .brand svg {
-      width: 16px;
-      height: 16px;
-      fill: #fff
-    }
-
-    nav ul {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-      padding: 0;
-      font-weight: 500
-    }
-
-    nav ul a {
-      text-decoration: none;
-      color: var(--mute)
-    }
-
-    nav ul a:hover {
-      color: var(--ink)
-    }
-
-    nav .btn {
-      height: 42px;
-      padding: 0 20px;
-      font-size: 15px
-    }
-
-    /* hero */
-    .hero {
-      background: var(--blush);
-      padding: 64px 0 72px;
-      overflow: hidden
-    }
-
-    .hero .wrap {
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 40px;
-      align-items: center
-    }
-
-    .hero h1 {
-      font-size: clamp(40px, 6vw, 68px);
-      font-weight: 800;
-      max-width: 11em
-    }
-
-    .hero p.lead {
-      margin: 22px 0 32px;
-      font-size: 19px;
-      color: #4a4244;
-      max-width: 30em
-    }
-
-    .cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px
-    }
-
-    .hero small {
-      display: block;
-      margin-top: 22px;
-      color: var(--mute);
-      font-size: 14px
-    }
-
-    .stage {
-      width: min(440px, 100%);
-      margin: 0 auto;
-      touch-action: pan-y;
-      user-select: none;
-      cursor: grab
-    }
-
-    .stage:active {
-      cursor: grabbing
-    }
-
-    .wheel {
-      position: relative;
-      height: 290px
-    }
-
-    .slide {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      width: 220px;
-      height: 220px;
-      margin-left: -110px;
-      will-change: transform
-    }
-
-    .slide svg {
-      width: 100%;
-      height: 100%
-    }
-
-    .copy {
-      position: relative;
-      height: 132px;
-      margin: 8px 16px 0
-    }
-
-    .copy div {
-      position: absolute;
-      inset: 0;
-      text-align: center
-    }
-
-    .copy h3 {
-      font-size: 30px;
-      font-weight: 800
-    }
-
-    .copy p {
-      margin-top: 10px;
-      font-size: 16px;
-      line-height: 1.5;
-      color: #5a5254
-    }
-
-    .dots {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 4px
-    }
-
-    .dots button {
-      width: 8px;
-      height: 8px;
-      border-radius: 4px;
-      border: 0;
-      background: #f4bcc2;
-      padding: 0;
-      cursor: pointer;
-      transition: width .2s, background .2s
-    }
-
-    .dots button.on {
-      width: 26px;
-      background: var(--red)
-    }
-
-    .next {
-      display: flex;
-      width: min(100%, 320px);
-      margin: 24px auto 0
-    }
-
-    /* sections */
-    section {
-      padding: 84px 0
-    }
-
-    h2 {
-      font-size: clamp(30px, 4vw, 44px);
-      font-weight: 800
-    }
-
-    .sub {
-      margin-top: 12px;
-      color: var(--mute);
-      max-width: 34em
-    }
-
-    /* carousel */
-    .shots {
-      background: var(--mist);
-      padding-bottom: 64px
-    }
-
-    .rail {
-      position: relative
-    }
-
-    .track {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding: 32px max(24px, calc((100vw - 1100px)/2)) 8px;
-      scroll-padding-left: max(24px, calc((100vw - 1100px)/2));
-      scrollbar-width: none
-    }
-
-    .track::-webkit-scrollbar {
-      display: none
-    }
-
-    .sh {
-      flex: 0 0 auto;
-      height: 420px;
-      aspect-ratio: 540/1100;
-      border: 0;
-      padding: 0;
-      border-radius: 16px;
-      overflow: hidden;
-      background: var(--blush);
-      cursor: zoom-in;
-      scroll-snap-align: start
-    }
-
-    .sh img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block
-    }
-
-    .arr {
-      position: absolute;
-      top: 50%;
-      margin-top: -20px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 0;
-      background: #fff;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity .2s;
-      z-index: 2
-    }
-
-    .arr.l {
-      left: max(12px, calc((100vw - 1100px)/2 - 24px))
-    }
-
-    .arr.r {
-      right: max(12px, calc((100vw - 1100px)/2 - 24px))
-    }
-
-    .rail:hover .arr,
-    .arr:focus-visible {
-      opacity: 1
-    }
-
-    .arr[hidden] {
-      display: none
-    }
-
-    .arr svg,
-    .lb .n svg,
-    .lb .x svg {
-      width: 22px;
-      height: 22px;
-      stroke: var(--ink);
-      fill: none;
-      stroke-width: 2.4;
-      stroke-linecap: round;
-      stroke-linejoin: round
-    }
-
-    @media(hover:none) {
-      .arr {
-        display: none
-      }
-    }
-
-    .lb {
-      position: fixed;
-      inset: 0;
-      z-index: 60;
-      background: rgba(24, 12, 12, .9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px
-    }
-
-    .lb[hidden] {
-      display: none
-    }
-
-    .lb figure {
-      max-width: 92vw;
-      text-align: center
-    }
-
-    .lb img {
-      max-height: 80vh;
-      max-width: 92vw;
-      border-radius: 20px;
-      display: block;
-      margin: 0 auto;
-      background: #2a1d1d;
-      min-width: 200px;
-      min-height: 300px
-    }
-
-    .lb figcaption {
-      margin-top: 14px;
-      color: #fff;
-      font-weight: 500
-    }
-
-    .lb button {
-      position: absolute;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 0;
-      background: #fff;
-      cursor: pointer;
-      display: grid;
-      place-items: center
-    }
-
-    .lb .x {
-      top: 20px;
-      right: 20px
-    }
-
-    .lb .n.l {
-      left: 20px;
-      top: 50%;
-      margin-top: -24px
-    }
-
-    .lb .n.r {
-      right: 20px;
-      top: 50%;
-      margin-top: -24px
-    }
-
-    @media(max-width:700px) {
-      .lb .n {
-        display: none
-      }
-    }
-
-    /* demo */
-    .demo .wrap {
-      text-align: center
-    }
-
-    .demo .sub {
-      margin-inline: auto
-    }
-
-    .video {
-      margin: 36px auto 0;
-      max-width: 860px;
-      aspect-ratio: 16/9;
-      border-radius: 24px;
-      overflow: hidden;
-      background: #1D1A1A;
-      display: grid;
-      place-items: center;
-      color: #fff
-    }
-
-    .video video,
-    .video iframe {
-      width: 100%;
-      height: 100%;
-      border: 0
-    }
-
-    .video .ph {
-      text-align: center;
-      padding: 20px
-    }
-
-    .video .ph b {
-      display: grid;
-      place-items: center;
-      width: 76px;
-      height: 76px;
-      margin: 0 auto 14px;
-      border-radius: 50%;
-      background: var(--red)
-    }
-
-    .video .ph svg {
-      width: 30px;
-      height: 30px;
-      fill: #fff;
-      margin-left: 4px
-    }
-
-    /* about */
-    .about .wrap {
-      display: grid;
-      grid-template-columns: .8fr 1.2fr;
-      gap: 56px
-    }
-
-    .about .intro p {
-      margin-top: 18px;
-      color: var(--mute)
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 24px
-    }
-
-    .chips span {
-      padding: 6px 14px;
-      border-radius: 999px;
-      background: var(--blush);
-      color: #9f1d1d;
-      font-weight: 500;
-      font-size: 14px
-    }
-
-    .feat {
-      list-style: none;
-      padding: 0;
-      border-top: 1px solid var(--line)
-    }
-
-    .feat li {
-      padding: 20px 0;
-      border-bottom: 1px solid var(--line)
-    }
-
-    .feat b {
-      display: block;
-      font: 800 20px "Bricolage Grotesque", sans-serif;
-      letter-spacing: -.01em
-    }
-
-    .feat span {
-      color: var(--mute)
-    }
-
-    /* contact */
-    .contact {
-      background: var(--red);
-      color: #fff
-    }
-
-    .contact .wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 56px;
-      align-items: start
-    }
-
-    .contact p {
-      margin-top: 16px;
-      color: #ffe4e4;
-      max-width: 28em
-    }
-
-    .contact .cta {
-      margin-top: 28px
-    }
-
-    .contact .btn.fill {
-      background: #fff;
-      color: var(--red);
-      border-color: #fff
-    }
-
-    .contact .btn.fill:hover {
-      background: var(--blush);
-      border-color: var(--blush)
-    }
-
-    .contact .btn.line {
-      color: #fff;
-      border-color: #fff
-    }
-
-    .contact .btn.line:hover {
-      background: #fff;
-      color: var(--red)
-    }
-
-    form {
-      display: grid;
-      gap: 12px
-    }
-
-    label {
-      font-size: 14px;
-      font-weight: 500
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      margin-top: 6px;
-      padding: 14px 16px;
-      border-radius: 14px;
-      border: 2px solid transparent;
-      font: 400 16px "DM Sans", sans-serif;
-      color: var(--ink);
-      background: #fff
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical
-    }
-
-    input:focus,
-    textarea:focus {
-      outline: 3px solid var(--ink);
-      outline-offset: 2px
-    }
-
-    form .btn {
-      background: var(--ink);
-      border-color: var(--ink);
-      color: #fff;
-      margin-top: 4px
-    }
-
-    form .btn:hover {
-      background: #000
-    }
-
-    footer {
-      padding: 28px 0;
-      color: var(--mute);
-      font-size: 14px
-    }
-
-    footer .wrap {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px
-    }
-
-    #toast {
-      position: fixed;
-      left: 50%;
-      bottom: 28px;
-      transform: translate(-50%, 20px);
-      background: var(--ink);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 999px;
-      font-size: 15px;
-      opacity: 0;
-      pointer-events: none;
-      transition: .25s;
-      z-index: 50
-    }
-
-    #toast.on {
-      opacity: 1;
-      transform: translate(-50%, 0)
-    }
-
-    @media(max-width:860px) {
-      nav ul {
-        display: none
-      }
-
-      .hero .wrap,
-      .about .wrap,
-      .contact .wrap {
-        grid-template-columns: 1fr
-      }
-
-      .hero {
-        padding-top: 40px
-      }
-
-      .stage {
-        margin-top: 24px
-      }
-
-      section {
-        padding: 60px 0
-      }
-    }
-
-    @media(prefers-reduced-motion:reduce) {
-      html {
-        scroll-behavior: auto
-      }
-
-      * {
-        transition: none !important
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forkly: order food and book a table</title>
+<meta name="description" content="Forkly is a food ordering and table booking app built with React Native. Download it or try the web demo.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+:root{--red:#DC2626;--blush:#FCE8EA;--ink:#1D1A1A;--mute:#6E6769;--mist:#F6F2F2;--line:#EADFE0;--yellow:#FFF0C8;--green:#DDF1D2}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font:400 17px/1.65 "Montserrat",system-ui,sans-serif;color:var(--ink);background:#FDFBFA;overflow-x:hidden}
+h1,h2,h3,h4,.brand{font-family:"Outfit","Montserrat",sans-serif;font-weight:500;line-height:1.1;letter-spacing:-.02em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:56px;padding:0 32px;border-radius:999px;font:500 17px "Montserrat",sans-serif;text-decoration:none;border:1.5px solid var(--red);cursor:pointer;transition:background .15s,color .15s}
+.btn.fill{background:var(--red);color:#fff}.btn.fill:hover{background:#b91c1c;border-color:#b91c1c}
+.btn.line{background:transparent;color:var(--red)}.btn.line:hover{background:var(--red);color:#fff}
+.btn.soon{opacity:.6}
+.sq{position:relative;display:inline-block}
+.sq::after{content:"";position:absolute;left:0;right:0;bottom:-.14em;height:.26em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M1 6 C15 1 30 9 50 5 S85 2 99 6' fill='none' stroke='%231D1A1A' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+nav{position:sticky;top:0;z-index:20;background:rgba(253,251,250,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{display:flex;align-items:center;gap:10px;font-size:30px;font-weight:600;color:var(--ink);text-decoration:none}
+.brand i{width:32px;height:32px;border-radius:9px;background:var(--red);display:grid;place-items:center}
+.brand svg{width:18px;height:18px;fill:#fff}
+nav ul{display:flex;gap:30px;list-style:none;padding:0;font-weight:500;font-size:15px}
+nav ul a{text-decoration:none;color:var(--mute)}nav ul a:hover{color:var(--ink)}
+nav .btn{height:46px;padding:0 24px;font-size:16px}
+/* hero */
+.hero{text-align:center;padding:64px 0 24px;position:relative}
+.badge{display:inline-block;padding:11px 24px;border:1.5px solid var(--ink);border-radius:999px;font-size:16px}
+.hero h1{margin:36px auto 0;font-size:clamp(42px,8vw,84px);max-width:11em}
+.hero p.lead{margin:26px auto 34px;font-size:19px;max-width:32em}
+.cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.hero .cta .btn{flex:1 1 230px;max-width:290px}
+.stats{display:flex;justify-content:center;gap:clamp(24px,7vw,80px);margin-top:56px}
+.stat .disc{display:grid;place-items:center;width:84px;height:84px;margin:0 auto 14px;border-radius:50%;background:var(--blush)}
+.disc svg{width:34px;height:34px;stroke:var(--red);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.stat b{display:block;font:500 30px/1 "Outfit",sans-serif}
+.stat span{display:block;margin-top:6px;color:var(--mute);font-size:16px}
+.showhero{position:relative;padding:56px 0 80px}
+.blob{position:absolute;z-index:0}
+.blob.a{left:0;top:30px;width:min(34%,330px);height:300px;background:var(--yellow);border-radius:40px 40px 160px 40px}
+.blob.b{right:0;top:0;width:min(34%,330px);height:300px;background:var(--green);border-radius:40px 40px 40px 160px}
+.blob.c{left:50%;bottom:30px;width:min(70%,640px);height:300px;margin-left:calc(min(70%,640px)/-2);background:var(--blush);border-radius:300px 300px 40px 40px}
+.showhero .stage{position:relative;z-index:1}
+.stage{width:min(440px,100%);margin:0 auto;touch-action:pan-y;user-select:none;cursor:grab}
+.stage:active{cursor:grabbing}
+.wheel{position:relative;height:290px}
+.slide{position:absolute;top:10px;left:50%;width:220px;height:220px;margin-left:-110px;will-change:transform}
+.slide svg{width:100%;height:100%}
+.copy{position:relative;height:132px;margin:8px 16px 0}
+.copy div{position:absolute;inset:0;text-align:center}
+.copy h3{font-size:30px;font-weight:800}.copy p{margin-top:10px;font-size:16px;line-height:1.5;color:#5a5254}
+.dots{display:flex;justify-content:center;gap:8px;margin-top:4px}
+.dots button{width:8px;height:8px;border-radius:4px;border:0;background:#f4bcc2;padding:0;cursor:pointer;transition:width .2s,background .2s}
+.dots button.on{width:26px;background:var(--red)}
+.next{display:flex;width:min(100%,320px);margin:24px auto 0}
+
+/* sections */
+section{padding:72px 0}
+h2{font-size:clamp(34px,5vw,54px);text-align:center}
+.sub{margin:16px auto 0;text-align:center;color:var(--mute);max-width:34em}
+.whybox{background:var(--blush);border-radius:36px;padding:56px 24px 40px}
+.whybox [data-art]{width:min(300px,80%);margin:28px auto 0}
+.whybox [data-art] svg{display:block;width:100%;height:auto}
+.feats{display:grid;gap:8px;margin-top:28px}
+.feat{display:flex;align-items:center;gap:22px;padding:22px 26px;border-radius:28px;border:1px solid transparent;transition:background .2s,box-shadow .2s,border-color .2s}
+.feat:hover{background:#fff;border-color:var(--line);box-shadow:0 18px 34px -22px rgba(60,0,0,.35)}
+.feat .disc{flex:0 0 76px;width:76px;height:76px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.feat h3{font-size:24px}.feat p{margin-top:6px;color:var(--mute);font-size:16px}
+.drive{margin:0 20px;max-width:1060px;margin-inline:auto;text-align:center;padding:52px 28px;border-radius:28px;background:#FFF7F7;border:1px solid #F1BEC4}
+.drive h2{font-size:clamp(30px,4vw,44px)}.drive p{margin:14px auto 28px;max-width:30em}
+.how h2 .sq{display:inline-block}
+.steps{list-style:none;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:48px 28px;margin-top:56px}
+.step{position:relative;flex:1 1 300px;max-width:340px}
+.step .card{background:var(--blush);border-radius:32px;height:360px;padding:30px 34px 0;overflow:hidden}
+.crop{border-radius:22px 22px 0 0;overflow:hidden;background:#f6cfd3;min-height:300px}
+[data-shot] img{display:block;width:100%;height:auto}
+.num{position:absolute;top:-16px;left:-8px;z-index:2;width:68px;height:68px;border-radius:50%;background:var(--red);color:#fff;border:7px solid #FDFBFA;display:grid;place-items:center;font:500 28px/1 "Outfit",sans-serif}
+.step h3{margin-top:22px;font-size:28px;font-weight:400}.step p{margin-top:8px;color:var(--mute);font-size:16px}
+.faq .list{max-width:780px;margin:44px auto 0;display:grid;gap:14px}
+details{border:1px solid var(--line);border-radius:28px;padding:22px 28px;background:#fff}
+summary{display:flex;justify-content:space-between;align-items:center;gap:20px;cursor:pointer;list-style:none;font:400 22px/1.3 "Outfit",sans-serif}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";flex:0 0 12px;width:12px;height:12px;border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(45deg) translate(-3px,-3px);transition:transform .2s}
+details[open] summary::after{transform:rotate(-135deg) translate(-3px,-3px)}
+details p{margin-top:14px;color:var(--mute)}
+.show{margin:0 auto;max-width:1060px;background:var(--red);border-radius:40px;padding:56px 20px 0;height:430px;overflow:hidden;display:flex;justify-content:center}
+.phone{width:min(270px,70%);align-self:flex-start;border:9px solid #1D1A1A;border-bottom:0;border-radius:42px 42px 0 0;overflow:hidden;background:#fff}
+.dl{padding:24px 0 72px}
+.dlcard{max-width:1060px;margin:0 auto;background:#14100f;color:#fff;border-radius:40px;padding:60px 24px 0;text-align:center;overflow:hidden}
+.dlcard h2{color:#fff}.dlcard p{margin:16px auto 0;max-width:28em;font-size:20px;color:#d9d2d2}
+.stores{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:34px}
+.store{display:inline-flex;align-items:center;gap:12px;height:66px;padding:0 24px;border:1px solid #fff;border-radius:14px;background:#000;color:#fff;text-decoration:none;text-align:left;line-height:1.2}
+.store svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.store small{display:block;font-size:12px;opacity:.85}.store b{font:500 22px "Outfit",sans-serif}
+.store.soon{opacity:.65}
+.artrow{display:flex;justify-content:center;margin:40px 0 -70px}
+.artrow [data-art]{width:min(200px,33%)}.artrow [data-art]:nth-child(2){margin:-24px -14px 0;position:relative;z-index:1}
+.artrow svg{display:block;width:100%;height:auto}
+footer{padding:64px 0 32px;color:var(--mute);font-size:16px}
+footer .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px 24px}
+footer h4{font-size:22px;color:var(--ink);font-weight:500;margin-bottom:18px}
+footer ul{list-style:none;padding:0;display:grid;gap:14px}footer a{text-decoration:none}footer a:hover{color:var(--ink)}
+.social{display:flex;gap:12px;margin-top:4px}
+.social a{width:58px;height:58px;border-radius:50%;background:var(--ink);display:grid;place-items:center}
+.social svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.foot2{margin-top:44px;padding-top:36px;border-top:1px solid var(--line);text-align:center}
+.foot2 .brand{justify-content:center}
+.legal{display:flex;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.legal a{padding:0 18px;border-right:1px solid var(--line);margin-bottom:8px}.legal a:last-child{border:0}
+.copyr{margin-top:22px;font-size:15px}
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-size:15px;opacity:0;pointer-events:none;transition:.25s;z-index:70}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(min-width:861px){
+ .feats{grid-template-columns:repeat(3,1fr);gap:14px}.feat{flex-direction:column;align-items:flex-start;padding:30px 28px}
+ .whybox{padding:64px 48px 48px}
+ footer .grid{grid-template-columns:repeat(5,1fr)}
+}
+@media(max-width:860px){nav ul{display:none}.hero{padding-top:44px}.blob.c{display:none}.show{height:380px}}
+@media(max-width:560px){.blob.a,.blob.b{width:38%;height:220px}.dlcard h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+/* carousel */
+.shots{background:var(--mist);padding-bottom:64px}
+.rail{position:relative}
+.track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:32px max(24px,calc((100vw - 1100px)/2)) 8px;scroll-padding-left:max(24px,calc((100vw - 1100px)/2));scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.sh{flex:0 0 auto;height:420px;aspect-ratio:540/1100;border:0;padding:0;border-radius:16px;overflow:hidden;background:var(--blush);cursor:zoom-in;scroll-snap-align:start}
+.sh img{width:100%;height:100%;object-fit:cover;display:block}
+.arr{position:absolute;top:50%;margin-top:-20px;width:48px;height:48px;border-radius:50%;border:0;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.25);display:grid;place-items:center;cursor:pointer;opacity:0;transition:opacity .2s;z-index:2}
+.arr.l{left:max(12px,calc((100vw - 1100px)/2 - 24px))}.arr.r{right:max(12px,calc((100vw - 1100px)/2 - 24px))}
+.rail:hover .arr,.arr:focus-visible{opacity:1}
+.arr[hidden]{display:none}
+.arr svg,.lb .n svg,.lb .x svg{width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+@media(hover:none){.arr{display:none}}
+.lb{position:fixed;inset:0;z-index:60;background:rgba(24,12,12,.9);display:flex;align-items:center;justify-content:center;padding:24px}
+.lb[hidden]{display:none}
+.lb figure{max-width:92vw;text-align:center}
+.lb img{max-height:80vh;max-width:92vw;border-radius:20px;display:block;margin:0 auto;background:#2a1d1d;min-width:200px;min-height:300px}
+.lb figcaption{margin-top:14px;color:#fff;font-weight:500}
+.lb button{position:absolute;width:48px;height:48px;border-radius:50%;border:0;background:#fff;cursor:pointer;display:grid;place-items:center}
+.lb .x{top:20px;right:20px}.lb .n.l{left:20px;top:50%;margin-top:-24px}.lb .n.r{right:20px;top:50%;margin-top:-24px}
+@media(max-width:700px){.lb .n{display:none}}
+</style>
 </head>
-
 <body>
 
-  <nav>
-    <div class="wrap">
-      <a class="brand" href="#top"><i><svg viewBox="0 0 24 24">
-            <path
-              d="M7 2v8a3 3 0 0 0 2 2.8V22h2V12.8A3 3 0 0 0 13 10V2h-2v6H9.5V2h-1.5v6H7V2zM17 2c-2 1.5-3 4-3 7 0 2 1 3.5 3 4v9h2V2z" />
-          </svg></i>Forkly</a>
-      <ul>
-        <li><a href="#screens">Screenshots</a></li>
-        <li><a href="#demo">Demo</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <a class="btn fill" data-link="webDemo" href="#">Try the web demo</a>
-    </div>
-  </nav>
+<nav><div class="wrap">
+  <a class="brand" href="#top"><i><svg viewBox="0 0 24 24"><path d="M7 2v8a3 3 0 0 0 2 2.8V22h2V12.8A3 3 0 0 0 13 10V2h-2v6H9.5V2h-1.5v6H7V2zM17 2c-2 1.5-3 4-3 7 0 2 1 3.5 3 4v9h2V2z"/></svg></i>Forkly</a>
+  <ul><li><a href="#why">Why Forkly</a></li><li><a href="#how">How it works</a></li><li><a href="#screens">Screens</a></li><li><a href="#faq">FAQs</a></li></ul>
+  <a class="btn fill" data-link="apk" href="#">Download app</a>
+</div></nav>
 
-  <header class="hero" id="top">
-    <div class="wrap">
-      <div>
-        <h1>Hungry? Order in a few taps, or book a table.</h1>
-        <p class="lead">Forkly is a food ordering and table booking app built with React Native. Try it in your browser,
-          or install it on your Android phone.</p>
-        <div class="cta">
-          <a class="btn fill" data-link="webDemo" href="#">Try the web demo</a>
-          <a class="btn line" data-link="apk" href="#">Download for Android</a>
-        </div>
-        <small>A portfolio project by <span data-dev>the developer</span>.</small>
-      </div>
-      <div class="stage" id="stage" aria-label="Forkly welcome slides. Drag, or use the dots to change slides.">
-        <div class="wheel" id="wheel"></div>
-        <div class="copy" id="copy"></div>
-        <div class="dots" id="dots"></div>
-        <button class="btn fill next" id="next" type="button">Next</button>
-      </div>
-    </div>
-  </header>
-
-  <section class="shots" id="screens">
-    <div class="wrap">
-      <h2>A look inside</h2>
-      <p class="sub">Tap any screen for a closer look.</p>
-    </div>
-    <div class="rail">
-        <button class="arr l" id="arrL" type="button" aria-label="Scroll left" hidden><svg viewBox="0 0 24 24">
-          <path d="M15 5l-7 7 7 7" />
-        </svg></button>
-      <div class="track" id="track" tabindex="0" aria-label="App screenshots"></div>
-      <button class="arr r" id="arrR" type="button" aria-label="Scroll right"><svg viewBox="0 0 24 24">
-          <path d="M9 5l7 7-7 7" />
-        </svg></button>
-    </div>
-  </section>
-
-  <section class="demo" id="demo">
-    <div class="wrap">
-      <h2>See it in action</h2>
-      <p class="sub">A short walkthrough: browse, customise a dish, check out and book a table.</p>
-      <div class="video" id="video"></div>
-    </div>
-  </section>
-
-  <section class="about" id="about">
-    <div class="wrap">
-      <div class="intro">
-        <h2>About Forkly</h2>
-        <p>I built Forkly to practise shipping a complete mobile product, from the first onboarding screen to placing an
-          order. It runs on Android, iOS and the web from one codebase.</p>
-        <div class="chips"><span>React Native</span><span>Expo
-            Router</span><span>Zustand</span><span>AsyncStorage</span><span>react-native-svg</span></div>
-      </div>
-      <ul class="feat">
-        <li><b>Find somewhere to eat</b><span>Browse by category, search by name, then open a restaurant to see its
-            popular dishes and full menu.</span></li>
-        <li><b>Make each dish yours</b><span>Pick a size, add extras and set the quantity. The price updates as you
-            choose.</span></li>
-        <li><b>Cart and checkout</b><span>Edit items right from the cart, choose cash or card, and follow your orders in
-            one place.</span></li>
-        <li><b>Reserve without the hassle</b><span>Tell a restaurant when you’re coming. No specific table is held, the
-            restaurant just knows to expect you.</span></li>
-        <li><b>Picks up where you left off</b><span>Your cart, orders and account are saved on the device, so nothing is
-            lost when the app closes.</span></li>
-        <li><b>Welcome flow</b><span>A three-slide intro, then sign up or log in. It only shows the first time.</span>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="contact" id="contact">
-    <div class="wrap">
-      <div>
-        <h2>Want an app like this?</h2>
-        <p>I build mobile and web apps like Forkly for restaurants, shops and small businesses. Tell me what you need
-          and I’ll get back to you.</p>
-        <div class="cta">
-          <a class="btn fill" data-link="email" href="#">Email me</a>
-          <a class="btn line" data-link="whatsapp" href="#">Chat on WhatsApp</a>
-        </div>
-      </div>
-      <form id="form">
-        <label>Your name<input name="name" required autocomplete="name"></label>
-        <label>Your email<input name="email" type="email" required autocomplete="email"></label>
-        <label>What do you need built?<textarea name="msg" required></textarea></label>
-        <button class="btn" type="submit">Send message</button>
-      </form>
-    </div>
-  </section>
-
-  <footer>
-    <div class="wrap"><span>Forkly is a portfolio project by <span data-dev>the developer</span>.</span><a
-        data-link="github" href="#">Source code on GitHub</a></div>
-  </footer>
-  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Screenshot viewer" hidden>
-    <button class="x" id="lbx" type="button" aria-label="Close"><svg viewBox="0 0 24 24">
-        <path d="M6 6l12 12M18 6L6 18" />
-      </svg></button>
-    <button class="n l" id="lbp" type="button" aria-label="Previous screenshot"><svg viewBox="0 0 24 24">
-        <path d="M15 5l-7 7 7 7" />
-      </svg></button>
-    <figure><img id="lbimg" alt="">
-      <figcaption id="lbcap"></figcaption>
-    </figure>
-    <button class="n r" id="lbn" type="button" aria-label="Next screenshot"><svg viewBox="0 0 24 24">
-        <path d="M9 5l7 7-7 7" />
-      </svg></button>
+<header class="hero" id="top"><div class="wrap">
+  <span class="badge">Hungry? Start here</span>
+  <h1>Order your next meal with <span class="sq">Forkly</span></h1>
+  <p class="lead">Find places to eat, order in a few taps and book a table, all in one simple app.</p>
+  <div class="cta"><a class="btn fill" data-link="apk" href="#">Download for Android</a><a class="btn line" data-link="webDemo" href="#">Try the web demo</a></div>
+  <div class="stats">
+    <div class="stat"><div class="disc"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div><b data-to="14">0</b><span>app screens</span></div>
+    <div class="stat"><div class="disc"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><b data-to="4">0</b><span>restaurants</span></div>
+    <div class="stat"><div class="disc"><svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M8 8c0-2 2-2 2-4M13 8c0-2 2-2 2-4"/></svg></div><b data-to="40">0</b><span>dishes</span></div>
   </div>
-  <div id="toast" role="status"></div>
+</div></header>
 
-  <script>
-    /* ===== Fill these in ===== */
-    const CONFIG = {
-      devName: "MacAnthony",
-      webDemo: "jdjdj",    // link to your Vercel web app
-      apk: "jdjdj",        // link to the APK (Google Drive etc.)
-      email: "charlesmacanthony797@gmail.com",      // your email address
-      whatsapp: "2349161489807",   // digits only with country code, e.g. 2348012345678
-      github: "github.com/mac-101/forkly",     // repo link
-      demoVideo: "",  // "assets/demo.mp4" or a YouTube link
-      screenshots: "./screens",       // folder with 1.png, 2.png, 3.png ... (up to 100)
-      screenshotExts: ["png", "jpg", "jpeg", "webp"],
-      screenshotsMax: 100,
-      // Title for image 1, 2, 3 ... in this order. Reorder or rename to match your files.
-      screenshotTitles: [
-        "Welcome: order in a few taps",     // 2
-        "Welcome: planning to dine in",     // 3
-        "Sign up",                          // 4
-        "Log in",                           // 5
-        "Home",  
-        "Restaurant List",                  // 7                           // 6
-        "Restaurant page",                  // 7
-        "Menu",                             // 8
-        "Item details",                     // 9
-        "Make reservation",                     // 12
-        "Cart",                             // 10
-        "Orders",                           // 11
-        "Reservations",                     // 13
-        "Profile"                           // 14
-      ]
-    };
-    // Online images, used only if the screenshots folder has no images yet.
-    const U = (id, kw, n) => {
-      const un = (w, h, q) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=${q}`;
-      const lf = (w, h) => `https://loremflickr.com/${w}/${h}/${kw}?lock=${n}`;
-      const pc = (w, h) => `https://picsum.photos/seed/forkly${n}/${w}/${h}`;
-      return { s: [un(540, 1100, 75), lf(540, 1100), pc(540, 1100)], l: [un(1080, 2200, 80), lf(1080, 2200), pc(1080, 2200)] };
-    };
-    function load(img, list, failed) {
-      list = [].concat(list); let i = 0;
-      img.onerror = () => { if (++i < list.length) img.src = list[i]; else if (failed) failed(); };
-      img.src = list[0];
+<div class="showhero">
+  <div class="blob a"></div><div class="blob b"></div><div class="blob c"></div>
+  <div class="stage" id="stage" aria-label="Forkly welcome slides. Drag, or use the dots to change slides.">
+    <div class="wheel" id="wheel"></div><div class="copy" id="copy"></div><div class="dots" id="dots"></div>
+    <button class="btn fill next" id="next" type="button">Next</button>
+  </div>
+</div>
+
+<section class="why" id="why"><div class="wrap"><div class="whybox">
+  <h2>Why <span class="sq">choose</span> Forkly?</h2>
+  <p class="sub">Eating out and ordering in, without the hassle.</p>
+  <div data-art="discover"></div>
+  <div class="feats">
+    <div class="feat"><div class="disc"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div><div><h3>Order in a few taps</h3><p>Find a place, pick a dish and check out. No long forms.</p></div></div>
+    <div class="feat"><div class="disc"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></div><div><h3>Make it yours</h3><p>Choose a size, add extras and set the quantity.</p></div></div>
+    <div class="feat"><div class="disc"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div><div><h3>Book without the hassle</h3><p>Tell a restaurant when you’re coming. No table is held, they just expect you.</p></div></div>
+  </div>
+</div></div></section>
+
+<div class="drive"><h2>Want an app like this?</h2><p>I build mobile and web apps for restaurants, shops and small businesses. Tell me what you need.</p>
+  <div class="cta"><a class="btn fill" data-link="email" href="#">Email me</a><a class="btn line" data-link="whatsapp" href="#">Chat on WhatsApp</a></div></div>
+
+<section class="how" id="how"><div class="wrap">
+  <h2>How to <span class="sq">order</span></h2>
+  <ol class="steps">
+    <li class="step"><span class="num">1</span><div class="card"><div class="crop" data-shot="6" data-alt="Find a place to eat"></div></div><h3>Find a place to eat</h3><p>Browse by category or search by name.</p></li>
+    <li class="step"><span class="num">2</span><div class="card"><div class="crop" data-shot="7" data-alt="Pick a restaurant"></div></div><h3>Pick a restaurant</h3><p>See its popular dishes and the full menu.</p></li>
+    <li class="step"><span class="num">3</span><div class="card"><div class="crop" data-shot="9" data-alt="Make it yours"></div></div><h3>Make it yours</h3><p>Choose a size, extras and quantity.</p></li>
+    <li class="step"><span class="num">4</span><div class="card"><div class="crop" data-shot="10" data-alt="Check out"></div></div><h3>Check out</h3><p>Review your cart and place the order.</p></li>
+    <li class="step"><span class="num">5</span><div class="card"><div class="crop" data-shot="12" data-alt="Book a table"></div></div><h3>Book a table</h3><p>Let the restaurant know when you’re coming.</p></li>
+  </ol>
+</div></section>
+
+<section class="shots" id="screens">
+  <div class="wrap"><h2>A look inside</h2><p class="sub">Tap any screen for a closer look.</p></div>
+  <div class="rail">
+    <button class="arr l" id="arrL" type="button" aria-label="Scroll left" hidden><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="track" id="track" tabindex="0" aria-label="App screenshots"></div>
+    <button class="arr r" id="arrR" type="button" aria-label="Scroll right"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+</section>
+
+
+
+<section class="faq" id="faq"><div class="wrap">
+  <h2><span class="sq">FAQs</span></h2>
+  <div class="list">
+    <details open><summary>Is Forkly a real food delivery service?</summary><p>No. Forkly is a portfolio project that shows what a complete food ordering app can look like. The restaurants and dishes are sample data.</p></details>
+    <details><summary>Which devices does it run on?</summary><p>It’s built with React Native, so one codebase runs on Android, iOS and the web. Right now you can try the web version or install the Android app.</p></details>
+    <details><summary>Where is my information stored?</summary><p>Your account, cart, orders and reservations are saved on your own device. Nothing is sent to a server.</p></details>
+    <details><summary>Does booking a table hold a table for me?</summary><p>No. A reservation just tells the restaurant when you plan to come, so they’re expecting you.</p></details>
+    <details><summary>Can you build something similar for my business?</summary><p>Yes. Use the email or WhatsApp buttons on this page and tell me what you need.</p></details>
+  </div>
+</div></section>
+
+<div class="wrap"><div class="show"><div class="phone"><div class="ph" data-shot="6" data-alt="Forkly home screen" style="margin:0;border-radius:0"></div></div></div></div>
+
+<section class="dl" id="download"><div class="wrap"><div class="dlcard">
+  <h2>Download the app now</h2>
+  <p>Take the first step towards ordering your next meal the easy way.</p>
+  <div class="stores">
+    <a class="store" data-link="apk" href="#"><svg viewBox="0 0 24 24"><path d="M6 3l14 9-14 9z"/></svg><span><small>Download the</small><b>Android app</b></span></a>
+    <a class="store" data-link="webDemo" href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3.5 3.5 3.5 14.5 0 18M12 3c-3.5 3.5-3.5 14.5 0 18"/></svg><span><small>Open in your browser</small><b>Web app</b></span></a>
+  </div>
+  <div class="artrow"><div data-art="discover"></div><div data-art="order"></div><div data-art="reserve"></div></div>
+</div></div></section>
+
+<footer><div class="wrap">
+  <div class="grid">
+    <div><h4>Product</h4><ul><li><a data-link="webDemo" href="#">Web demo</a></li><li><a data-link="apk" href="#">Android app</a></li><li><a href="#screens">Screens</a></li></ul></div>
+    <div><h4>Support</h4><ul><li><a href="#faq">FAQs</a></li><li><a data-link="email" href="#">Email me</a></li><li><a data-link="whatsapp" href="#">WhatsApp</a></li></ul></div>
+    <div><h4>Project</h4><ul><li><a href="#how">How it works</a></li><li><a data-link="github" href="#">Source code</a></li></ul></div>
+    <div><h4>Follow</h4><div class="social"><a data-link="github" href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M8 8l-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/></svg></a><a data-link="whatsapp" href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M4 20l1.4-4.2A8 8 0 1 1 8.2 18.6z"/></svg></a><a data-link="email" href="#" aria-label="Email"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg></a></div></div>
+  </div>
+  <div class="foot2">
+    <a class="brand" href="#top"><i><svg viewBox="0 0 24 24"><path d="M7 2v8a3 3 0 0 0 2 2.8V22h2V12.8A3 3 0 0 0 13 10V2h-2v6H9.5V2h-1.5v6H7V2zM17 2c-2 1.5-3 4-3 7 0 2 1 3.5 3 4v9h2V2z"/></svg></i>Forkly</a>
+    <div class="legal"><a data-link="webDemo" href="#">Web demo</a><a data-link="apk" href="#">Android app</a><a data-link="github" href="#">Source code</a></div>
+    <p class="copyr">© 2026 Forkly · A portfolio project by <span data-dev>the developer</span></p>
+  </div>
+</div></footer>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Screenshot viewer" hidden>
+  <button class="x" id="lbx" type="button" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="n l" id="lbp" type="button" aria-label="Previous screenshot"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <figure><img id="lbimg" alt=""><figcaption id="lbcap"></figcaption></figure>
+  <button class="n r" id="lbn" type="button" aria-label="Next screenshot"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+</div>
+
+
+<div id="toast" role="status"></div>
+<script>
+/* ===== Fill these in ===== */
+const CONFIG = {
+  devName: "MacAnthony",
+  webDemo: "",    // link to your Vercel web app
+  apk: "",        // link to the APK (Google Drive etc.)
+  email: "",      // your email address
+  whatsapp: "",   // digits only with country code, e.g. 2348012345678
+  github: "",     // repo link
+  demoVideo: "",  // "assets/demo.mp4" or a YouTube link
+  screenshots: "./screens",       // folder with 1.png, 2.png, 3.png ... (up to 100)
+  screenshotExts: ["png", "jpg", "jpeg", "webp"],
+  screenshotsMax: 100,
+  // Title for image 1, 2, 3 ... in this order. Reorder or rename to match your files.
+  screenshotTitles: [
+    "Welcome: find food you’ll love",   // 1
+    "Welcome: order in a few taps",     // 2
+    "Welcome: planning to dine in",     // 3
+    "Sign up",                          // 4
+    "Log in",                           // 5
+    "Home",                             // 6
+    "Restaurant page",                  // 7
+    "Menu",                             // 8
+    "Item details",                     // 9
+    "Cart",                             // 10
+    "Orders",                           // 11
+    "Book a table",                     // 12
+    "Reservations",                     // 13
+    "Profile"                           // 14
+  ]
+};
+// Online images, used only if the screenshots folder has no images yet.
+const U = (id, kw, n) => {
+  const un = (w, h, q) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=${q}`;
+  const lf = (w, h) => `https://loremflickr.com/${w}/${h}/${kw}?lock=${n}`;
+  const pc = (w, h) => `https://picsum.photos/seed/forkly${n}/${w}/${h}`;
+  return { s: [un(540, 1100, 75), lf(540, 1100), pc(540, 1100)], l: [un(1080, 2200, 80), lf(1080, 2200), pc(1080, 2200)] };
+};
+function load(img, list, failed) {
+  list = [].concat(list); let i = 0;
+  img.onerror = () => { if (++i < list.length) img.src = list[i]; else if (failed) failed(); };
+  img.src = list[0];
+}
+const FALLBACK = [
+  ["Discover places to eat", U("1517248135467-4c7edcad34c4", "restaurant", 1)],
+  ["Browse the menu", U("1513104890138-7c749659a591", "pizza", 2)],
+  ["Customise your dish", U("1568901346375-23c9450c58cd", "burger", 3)],
+  ["Check out from your cart", U("1512621776951-a57141f2eefd", "salad", 4)],
+  ["Book a table", U("1414235077428-338989a2e8c0", "dinner,table", 5)],
+  ["Follow your orders", U("1569718212165-3a8278d5f624", "ramen,noodles", 6)]
+];
+const ART = {"discover": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 240\"><circle cx=\"120\" cy=\"120\" r=\"112\" fill=\"#FCE8EA\"/><ellipse cx=\"120\" cy=\"206\" rx=\"52\" ry=\"7\" fill=\"#F3C6CA\"/><circle cx=\"120\" cy=\"150\" r=\"58\" fill=\"#FFFFFF\"/><circle cx=\"120\" cy=\"150\" r=\"58\" fill=\"none\" stroke=\"#F3C6CA\" stroke-width=\"4\"/><circle cx=\"120\" cy=\"150\" r=\"42\" fill=\"#F6F6F7\"/><circle cx=\"120\" cy=\"150\" r=\"32\" fill=\"#F6B64D\"/><circle cx=\"120\" cy=\"150\" r=\"26\" fill=\"#E5533D\"/><circle cx=\"120\" cy=\"150\" r=\"26\" fill=\"none\" stroke=\"#FFD76A\" stroke-width=\"5\" stroke-dasharray=\"14 8\"/><circle cx=\"110\" cy=\"142\" r=\"6\" fill=\"#B3261E\"/><circle cx=\"130\" cy=\"146\" r=\"6\" fill=\"#B3261E\"/><circle cx=\"118\" cy=\"162\" r=\"6\" fill=\"#B3261E\"/><circle cx=\"134\" cy=\"160\" r=\"3\" fill=\"#7BC043\"/><circle cx=\"106\" cy=\"156\" r=\"3\" fill=\"#7BC043\"/><rect x=\"36\" y=\"128\" width=\"5\" height=\"26\" rx=\"2\" fill=\"#8B8B93\"/><rect x=\"44\" y=\"128\" width=\"5\" height=\"26\" rx=\"2\" fill=\"#8B8B93\"/><rect x=\"52\" y=\"128\" width=\"5\" height=\"26\" rx=\"2\" fill=\"#8B8B93\"/><rect x=\"34\" y=\"150\" width=\"25\" height=\"10\" rx=\"5\" fill=\"#8B8B93\"/><rect x=\"44\" y=\"158\" width=\"5\" height=\"46\" rx=\"2.5\" fill=\"#8B8B93\"/><path d=\"M184 128 h12 a2 2 0 0 1 2 2 v32 h-14 z\" fill=\"#8B8B93\"/><rect x=\"185\" y=\"158\" width=\"5\" height=\"46\" rx=\"2.5\" fill=\"#8B8B93\"/><path d=\"M120 22 c-19 0 -32 14 -32 31 c0 24 32 50 32 50 s32 -26 32 -50 c0 -17 -13 -31 -32 -31z\" fill=\"#DC2626\"/><circle cx=\"120\" cy=\"53\" r=\"12\" fill=\"#FFFFFF\"/><path d=\"M190 52 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z\" fill=\"#F6B64D\"/><path d=\"M52 76 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z\" fill=\"#F6B64D\"/></svg>", "order": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 240\"><circle cx=\"120\" cy=\"120\" r=\"112\" fill=\"#FCE8EA\"/><ellipse cx=\"120\" cy=\"208\" rx=\"62\" ry=\"8\" fill=\"#F3C6CA\"/><path d=\"M58 164 h124 v4 a18 18 0 0 1 -18 18 h-88 a18 18 0 0 1 -18 -18 z\" fill=\"#F5A623\"/><rect x=\"52\" y=\"140\" width=\"136\" height=\"24\" rx=\"12\" fill=\"#7A3E1D\"/><path d=\"M56 134 h128 l-14 20 l-14 -12 l-14 14 l-14 -14 l-14 14 l-14 -14 l-14 14 l-14 -14 l-14 12 z\" fill=\"#FFD23F\"/><rect x=\"58\" y=\"122\" width=\"124\" height=\"14\" rx=\"7\" fill=\"#E5533D\"/><path d=\"M50 116 q10 -10 20 0 q10 10 20 0 q10 -10 20 0 q10 10 20 0 q10 -10 20 0 q10 10 20 0 q10 -10 20 0 q10 10 20 0 v10 h-140 z\" fill=\"#7BC043\"/><path d=\"M54 112 C54 56 186 56 186 112 Z\" fill=\"#F5A623\"/><path d=\"M70 100 C74 76 100 66 120 66\" fill=\"none\" stroke=\"#FFD08A\" stroke-width=\"6\" stroke-linecap=\"round\"/><ellipse cx=\"100\" cy=\"82\" rx=\"5\" ry=\"2.6\" transform=\"rotate(-20 100 82)\" fill=\"#FFF3D6\"/><ellipse cx=\"124\" cy=\"76\" rx=\"5\" ry=\"2.6\" transform=\"rotate(10 124 76)\" fill=\"#FFF3D6\"/><ellipse cx=\"148\" cy=\"86\" rx=\"5\" ry=\"2.6\" transform=\"rotate(25 148 86)\" fill=\"#FFF3D6\"/><ellipse cx=\"136\" cy=\"98\" rx=\"5\" ry=\"2.6\" transform=\"rotate(-10 136 98)\" fill=\"#FFF3D6\"/><ellipse cx=\"108\" cy=\"96\" rx=\"5\" ry=\"2.6\" transform=\"rotate(15 108 96)\" fill=\"#FFF3D6\"/><circle cx=\"190\" cy=\"58\" r=\"22\" fill=\"#DC2626\"/><path d=\"M180 58 l7 7 l13 -14\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M46 70 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z\" fill=\"#F6B64D\"/></svg>", "reserve": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 240\"><circle cx=\"120\" cy=\"120\" r=\"112\" fill=\"#FCE8EA\"/><ellipse cx=\"116\" cy=\"208\" rx=\"62\" ry=\"8\" fill=\"#F3C6CA\"/><rect x=\"48\" y=\"50\" width=\"136\" height=\"146\" rx=\"18\" fill=\"#FFFFFF\"/><path d=\"M48 68 a18 18 0 0 1 18 -18 h100 a18 18 0 0 1 18 18 v22 h-136 z\" fill=\"#DC2626\"/><rect x=\"80\" y=\"38\" width=\"9\" height=\"26\" rx=\"4.5\" fill=\"#8B8B93\"/><rect x=\"143\" y=\"38\" width=\"9\" height=\"26\" rx=\"4.5\" fill=\"#8B8B93\"/><g fill=\"#E9E9EC\"><rect x=\"64\" y=\"106\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"92\" y=\"106\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"120\" y=\"106\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"148\" y=\"106\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"64\" y=\"130\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"92\" y=\"130\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"148\" y=\"130\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"64\" y=\"154\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"92\" y=\"154\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"120\" y=\"154\" width=\"20\" height=\"16\" rx=\"5\"/></g><rect x=\"120\" y=\"130\" width=\"20\" height=\"16\" rx=\"5\" fill=\"#DC2626\"/><circle cx=\"178\" cy=\"170\" r=\"34\" fill=\"#FFFFFF\"/><circle cx=\"178\" cy=\"170\" r=\"34\" fill=\"none\" stroke=\"#DC2626\" stroke-width=\"6\"/><path d=\"M178 150 v20 l14 8\" fill=\"none\" stroke=\"#1A1A1A\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M42 84 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z\" fill=\"#F6B64D\"/><path d=\"M200 66 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z\" fill=\"#F6B64D\"/></svg>"};
+const SLIDES = [
+  ["discover","Find food you’ll love","Browse restaurants near you and discover your next favourite meal."],
+  ["order","Order in a few taps","Pick your dish, choose a size, add your extras and place the order."],
+  ["reserve","Planning to dine in?","Let the restaurant know when you’re coming, then just show up and enjoy."]
+];
+const $ = s => document.querySelector(s);
+const toast = m => { const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast.id); toast.id=setTimeout(()=>t.classList.remove("on"),2600); };
+
+/* links */
+document.querySelectorAll("[data-dev]").forEach(e => e.textContent = CONFIG.devName);
+const hrefs = {
+  webDemo: CONFIG.webDemo, apk: CONFIG.apk, github: CONFIG.github,
+  email: CONFIG.email && "mailto:" + CONFIG.email,
+  whatsapp: CONFIG.whatsapp && "https://wa.me/" + CONFIG.whatsapp
+};
+document.querySelectorAll("[data-link]").forEach(a => {
+  const url = hrefs[a.dataset.link];
+  if (url) { a.href = url; if (!url.startsWith("mailto")) { a.target = "_blank"; a.rel = "noopener"; } }
+  else { a.classList.add("soon"); a.addEventListener("click", e => { e.preventDefault(); toast("This link is coming soon."); }); }
+});
+/* hero: onboarding slides travelling along an arc */
+const wheel = $("#wheel"), copy = $("#copy"), dots = $("#dots");
+SLIDES.forEach(([k,t,p],i) => {
+  const s = document.createElement("div"); s.className = "slide"; s.innerHTML = ART[k]; wheel.append(s);
+  const c = document.createElement("div"); c.innerHTML = "<h3>"+t+"</h3><p>"+p+"</p>"; copy.append(c);
+  const d = document.createElement("button"); d.type = "button"; d.setAttribute("aria-label","Slide "+(i+1)); d.onclick = () => go(i); dots.append(d);
+});
+const slides = [...wheel.children], texts = [...copy.children], dotEls = [...dots.children];
+const R = 230, STEP = .5, LAST = SLIDES.length - 1;
+let p = 0, target = 0, dragging = false, raf = 0;
+const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+function draw() {
+  slides.forEach((el,i) => {
+    const d = i - p, a = Math.min(Math.abs(d), 2), th = d * STEP;
+    el.style.transform = `translate(${R*Math.sin(th)}px,${R*(1-Math.cos(th))}px) rotate(${th}rad) scale(${Math.max(.45,1-.28*a)})`;
+    el.style.opacity = Math.max(0, 1 - .65*a);
+    el.style.zIndex = Math.round(10 - a*3);
+  });
+  texts.forEach((el,i) => { const d = i - p; el.style.opacity = Math.max(0, 1 - Math.abs(d)*2); el.style.transform = `translateY(${d*24}px)`; });
+  const idx = Math.round(p);
+  dotEls.forEach((e,i) => e.classList.toggle("on", i === idx));
+  $("#next").textContent = "Next";
+}
+function tick() { p += (target - p) * .14; if (Math.abs(target - p) < .002) p = target; draw(); raf = p === target || dragging ? 0 : requestAnimationFrame(tick); }
+function go(i) { target = clamp(i, 0, LAST); cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); restart(); }
+$("#next").onclick = () => go(Math.round(p) >= LAST ? 0 : Math.round(p) + 1);
+const stage = $("#stage"); let x0 = 0, p0 = 0;
+stage.addEventListener("pointerdown", e => { if (e.target.closest("button")) return; dragging = true; x0 = e.clientX; p0 = p; cancelAnimationFrame(raf); clearInterval(auto); });
+addEventListener("pointermove", e => { if (!dragging) return; p = clamp(p0 - (e.clientX - x0) / 180, 0, LAST); draw(); });
+addEventListener("pointerup", () => { if (!dragging) return; dragging = false; go(Math.round(p)); });
+let auto; const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function restart() { clearInterval(auto); if (!still) auto = setInterval(() => go(Math.round(p) >= LAST ? 0 : Math.round(p) + 1), 3800); }
+draw(); restart();
+
+/* screenshots carousel (Play Store style) + lightbox */
+const track = $("#track"), arrL = $("#arrL"), arrR = $("#arrR");
+const SHOTS = [];
+function addShot(name, src) {
+  const i = SHOTS.push([name, src]) - 1;
+  const b = document.createElement("button"); b.type = "button"; b.className = "sh"; b.setAttribute("aria-label", "Open screenshot: " + name); b.title = name;
+  const img = new Image(); img.alt = name; img.loading = "lazy"; load(img, src.s, () => { b.remove(); edge(); });
+  b.append(img); b.onclick = () => openLb(i, b); track.append(b);
+}
+function edge() { arrL.hidden = track.scrollLeft < 8; arrR.hidden = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8; }
+track.addEventListener("scroll", edge, { passive: true }); addEventListener("resize", edge);
+arrL.onclick = () => track.scrollBy({ left: -track.clientWidth * .8, behavior: "smooth" });
+arrR.onclick = () => track.scrollBy({ left: track.clientWidth * .8, behavior: "smooth" });
+
+// Finds 1.png, 2.png, 3.png ... in the screenshots folder (any listed extension) and stops at the first missing number.
+const exts = [...CONFIG.screenshotExts];
+const probe = n => new Promise(res => {
+  const img = new Image(); let k = 0;
+  const next = () => k >= exts.length ? res(null) : (img.src = `${CONFIG.screenshots}/${n}.${exts[k++]}`);
+  img.onload = () => res(img.src); img.onerror = next; next();
+});
+async function loadShots() {
+  const BATCH = 8;
+  for (let start = 1; start <= CONFIG.screenshotsMax; start += BATCH) {
+    const nums = Array.from({ length: Math.min(BATCH, CONFIG.screenshotsMax - start + 1) }, (_, i) => start + i);
+    const urls = await Promise.all(nums.map(probe));
+    for (let i = 0; i < nums.length; i++) {
+      if (!urls[i]) return done();
+      const ext = urls[i].split(".").pop().split("?")[0];
+      exts.sort((a, b) => (b === ext) - (a === ext));
+      addShot(CONFIG.screenshotTitles[nums[i] - 1] || "Screenshot " + nums[i], { s: urls[i], l: urls[i] });
     }
-    const FALLBACK = [
-      ["Discover places to eat", U("1517248135467-4c7edcad34c4", "restaurant", 1)],
-      ["Browse the menu", U("1513104890138-7c749659a591", "pizza", 2)],
-      ["Customise your dish", U("1568901346375-23c9450c58cd", "burger", 3)],
-      ["Check out from your cart", U("1512621776951-a57141f2eefd", "salad", 4)],
-      ["Book a table", U("1414235077428-338989a2e8c0", "dinner,table", 5)],
-      ["Follow your orders", U("1569718212165-3a8278d5f624", "ramen,noodles", 6)]
-    ];
-    const ART = { "discover": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 240\"><circle cx=\"120\" cy=\"120\" r=\"112\" fill=\"#FCE8EA\"/><ellipse cx=\"120\" cy=\"206\" rx=\"52\" ry=\"7\" fill=\"#F3C6CA\"/><circle cx=\"120\" cy=\"150\" r=\"58\" fill=\"#FFFFFF\"/><circle cx=\"120\" cy=\"150\" r=\"58\" fill=\"none\" stroke=\"#F3C6CA\" stroke-width=\"4\"/><circle cx=\"120\" cy=\"150\" r=\"42\" fill=\"#F6F6F7\"/><circle cx=\"120\" cy=\"150\" r=\"32\" fill=\"#F6B64D\"/><circle cx=\"120\" cy=\"150\" r=\"26\" fill=\"#E5533D\"/><circle cx=\"120\" cy=\"150\" r=\"26\" fill=\"none\" stroke=\"#FFD76A\" stroke-width=\"5\" stroke-dasharray=\"14 8\"/><circle cx=\"110\" cy=\"142\" r=\"6\" fill=\"#B3261E\"/><circle cx=\"130\" cy=\"146\" r=\"6\" fill=\"#B3261E\"/><circle cx=\"118\" cy=\"162\" r=\"6\" fill=\"#B3261E\"/><circle cx=\"134\" cy=\"160\" r=\"3\" fill=\"#7BC043\"/><circle cx=\"106\" cy=\"156\" r=\"3\" fill=\"#7BC043\"/><rect x=\"36\" y=\"128\" width=\"5\" height=\"26\" rx=\"2\" fill=\"#8B8B93\"/><rect x=\"44\" y=\"128\" width=\"5\" height=\"26\" rx=\"2\" fill=\"#8B8B93\"/><rect x=\"52\" y=\"128\" width=\"5\" height=\"26\" rx=\"2\" fill=\"#8B8B93\"/><rect x=\"34\" y=\"150\" width=\"25\" height=\"10\" rx=\"5\" fill=\"#8B8B93\"/><rect x=\"44\" y=\"158\" width=\"5\" height=\"46\" rx=\"2.5\" fill=\"#8B8B93\"/><path d=\"M184 128 h12 a2 2 0 0 1 2 2 v32 h-14 z\" fill=\"#8B8B93\"/><rect x=\"185\" y=\"158\" width=\"5\" height=\"46\" rx=\"2.5\" fill=\"#8B8B93\"/><path d=\"M120 22 c-19 0 -32 14 -32 31 c0 24 32 50 32 50 s32 -26 32 -50 c0 -17 -13 -31 -32 -31z\" fill=\"#DC2626\"/><circle cx=\"120\" cy=\"53\" r=\"12\" fill=\"#FFFFFF\"/><path d=\"M190 52 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z\" fill=\"#F6B64D\"/><path d=\"M52 76 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z\" fill=\"#F6B64D\"/></svg>", "order": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 240\"><circle cx=\"120\" cy=\"120\" r=\"112\" fill=\"#FCE8EA\"/><ellipse cx=\"120\" cy=\"208\" rx=\"62\" ry=\"8\" fill=\"#F3C6CA\"/><path d=\"M58 164 h124 v4 a18 18 0 0 1 -18 18 h-88 a18 18 0 0 1 -18 -18 z\" fill=\"#F5A623\"/><rect x=\"52\" y=\"140\" width=\"136\" height=\"24\" rx=\"12\" fill=\"#7A3E1D\"/><path d=\"M56 134 h128 l-14 20 l-14 -12 l-14 14 l-14 -14 l-14 14 l-14 -14 l-14 14 l-14 -14 l-14 12 z\" fill=\"#FFD23F\"/><rect x=\"58\" y=\"122\" width=\"124\" height=\"14\" rx=\"7\" fill=\"#E5533D\"/><path d=\"M50 116 q10 -10 20 0 q10 10 20 0 q10 -10 20 0 q10 10 20 0 q10 -10 20 0 q10 10 20 0 q10 -10 20 0 q10 10 20 0 v10 h-140 z\" fill=\"#7BC043\"/><path d=\"M54 112 C54 56 186 56 186 112 Z\" fill=\"#F5A623\"/><path d=\"M70 100 C74 76 100 66 120 66\" fill=\"none\" stroke=\"#FFD08A\" stroke-width=\"6\" stroke-linecap=\"round\"/><ellipse cx=\"100\" cy=\"82\" rx=\"5\" ry=\"2.6\" transform=\"rotate(-20 100 82)\" fill=\"#FFF3D6\"/><ellipse cx=\"124\" cy=\"76\" rx=\"5\" ry=\"2.6\" transform=\"rotate(10 124 76)\" fill=\"#FFF3D6\"/><ellipse cx=\"148\" cy=\"86\" rx=\"5\" ry=\"2.6\" transform=\"rotate(25 148 86)\" fill=\"#FFF3D6\"/><ellipse cx=\"136\" cy=\"98\" rx=\"5\" ry=\"2.6\" transform=\"rotate(-10 136 98)\" fill=\"#FFF3D6\"/><ellipse cx=\"108\" cy=\"96\" rx=\"5\" ry=\"2.6\" transform=\"rotate(15 108 96)\" fill=\"#FFF3D6\"/><circle cx=\"190\" cy=\"58\" r=\"22\" fill=\"#DC2626\"/><path d=\"M180 58 l7 7 l13 -14\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M46 70 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z\" fill=\"#F6B64D\"/></svg>", "reserve": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 240\"><circle cx=\"120\" cy=\"120\" r=\"112\" fill=\"#FCE8EA\"/><ellipse cx=\"116\" cy=\"208\" rx=\"62\" ry=\"8\" fill=\"#F3C6CA\"/><rect x=\"48\" y=\"50\" width=\"136\" height=\"146\" rx=\"18\" fill=\"#FFFFFF\"/><path d=\"M48 68 a18 18 0 0 1 18 -18 h100 a18 18 0 0 1 18 18 v22 h-136 z\" fill=\"#DC2626\"/><rect x=\"80\" y=\"38\" width=\"9\" height=\"26\" rx=\"4.5\" fill=\"#8B8B93\"/><rect x=\"143\" y=\"38\" width=\"9\" height=\"26\" rx=\"4.5\" fill=\"#8B8B93\"/><g fill=\"#E9E9EC\"><rect x=\"64\" y=\"106\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"92\" y=\"106\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"120\" y=\"106\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"148\" y=\"106\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"64\" y=\"130\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"92\" y=\"130\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"148\" y=\"130\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"64\" y=\"154\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"92\" y=\"154\" width=\"20\" height=\"16\" rx=\"5\"/><rect x=\"120\" y=\"154\" width=\"20\" height=\"16\" rx=\"5\"/></g><rect x=\"120\" y=\"130\" width=\"20\" height=\"16\" rx=\"5\" fill=\"#DC2626\"/><circle cx=\"178\" cy=\"170\" r=\"34\" fill=\"#FFFFFF\"/><circle cx=\"178\" cy=\"170\" r=\"34\" fill=\"none\" stroke=\"#DC2626\" stroke-width=\"6\"/><path d=\"M178 150 v20 l14 8\" fill=\"none\" stroke=\"#1A1A1A\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M42 84 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z\" fill=\"#F6B64D\"/><path d=\"M200 66 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z\" fill=\"#F6B64D\"/></svg>" };
-    const SLIDES = [
-      ["discover", "Find food you’ll love", "Browse restaurants near you and discover your next favourite meal."],
-      ["order", "Order in a few taps", "Pick your dish, choose a size, add your extras and place the order."],
-      ["reserve", "Planning to dine in?", "Let the restaurant know when you’re coming, then just show up and enjoy."]
-    ];
-    const $ = s => document.querySelector(s);
-    const toast = m => { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(toast.id); toast.id = setTimeout(() => t.classList.remove("on"), 2600); };
+    edge();
+  }
+  done();
+}
+function done() { if (!SHOTS.length) FALLBACK.forEach(([n, s]) => addShot(n, s)); edge(); }
 
-    /* links */
-    document.querySelectorAll("[data-dev]").forEach(e => e.textContent = CONFIG.devName);
-    const hrefs = {
-      webDemo: CONFIG.webDemo, apk: CONFIG.apk, github: CONFIG.github,
-      email: CONFIG.email && "mailto:" + CONFIG.email,
-      whatsapp: CONFIG.whatsapp && "https://wa.me/" + CONFIG.whatsapp
-    };
-    document.querySelectorAll("[data-link]").forEach(a => {
-      const url = hrefs[a.dataset.link];
-      if (url) { a.href = url; if (!url.startsWith("mailto")) { a.target = "_blank"; a.rel = "noopener"; } }
-      else { a.classList.add("soon"); a.addEventListener("click", e => { e.preventDefault(); toast("This link is coming soon."); }); }
-    });
-    $("#form").addEventListener("submit", e => {
-      e.preventDefault();
-      if (!CONFIG.email) return toast("Contact email isn’t set up yet.");
-      const f = new FormData(e.target);
-      location.href = "mailto:" + CONFIG.email + "?subject=" + encodeURIComponent("Project enquiry from " + f.get("name")) +
-        "&body=" + encodeURIComponent(f.get("msg") + "\n\nFrom: " + f.get("name") + " (" + f.get("email") + ")");
-    });
+const lb = $("#lb"), lbImg = $("#lbimg"), lbCap = $("#lbcap"); let cur = 0, opener = null;
+function show(i) { cur = (i + SHOTS.length) % SHOTS.length; load(lbImg, SHOTS[cur][1].l); lbImg.alt = SHOTS[cur][0]; lbCap.textContent = SHOTS[cur][0]; }
+function openLb(i, el) { opener = el; show(i); lb.hidden = false; document.body.style.overflow = "hidden"; $("#lbx").focus(); }
+function closeLb() { lb.hidden = true; document.body.style.overflow = ""; lbImg.removeAttribute("src"); if (opener) opener.focus(); }
+$("#lbx").onclick = closeLb; $("#lbp").onclick = () => show(cur - 1); $("#lbn").onclick = () => show(cur + 1);
+lb.addEventListener("click", e => { if (e.target === lb || e.target.tagName === "FIGURE") closeLb(); });
+addEventListener("keydown", e => {
+  if (lb.hidden) return;
+  if (e.key === "Escape") closeLb();
+  if (e.key === "ArrowRight") show(cur + 1);
+  if (e.key === "ArrowLeft") show(cur - 1);
+});
 
-    /* hero: onboarding slides travelling along an arc */
-    const wheel = $("#wheel"), copy = $("#copy"), dots = $("#dots");
-    SLIDES.forEach(([k, t, p], i) => {
-      const s = document.createElement("div"); s.className = "slide"; s.innerHTML = ART[k]; wheel.append(s);
-      const c = document.createElement("div"); c.innerHTML = "<h3>" + t + "</h3><p>" + p + "</p>"; copy.append(c);
-      const d = document.createElement("button"); d.type = "button"; d.setAttribute("aria-label", "Slide " + (i + 1)); d.onclick = () => go(i); dots.append(d);
-    });
-    const slides = [...wheel.children], texts = [...copy.children], dotEls = [...dots.children];
-    const R = 230, STEP = .5, LAST = SLIDES.length - 1;
-    let p = 0, target = 0, dragging = false, raf = 0;
-    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-    function draw() {
-      slides.forEach((el, i) => {
-        const d = i - p, a = Math.min(Math.abs(d), 2), th = d * STEP;
-        el.style.transform = `translate(${R * Math.sin(th)}px,${R * (1 - Math.cos(th))}px) rotate(${th}rad) scale(${Math.max(.45, 1 - .28 * a)})`;
-        el.style.opacity = Math.max(0, 1 - .65 * a);
-        el.style.zIndex = Math.round(10 - a * 3);
-      });
-      texts.forEach((el, i) => { const d = i - p; el.style.opacity = Math.max(0, 1 - Math.abs(d) * 2); el.style.transform = `translateY(${d * 24}px)`; });
-      const idx = Math.round(p);
-      dotEls.forEach((e, i) => e.classList.toggle("on", i === idx));
-      $("#next").textContent = idx === LAST ? "Create account" : "Next";
-    }
-    function tick() { p += (target - p) * .14; if (Math.abs(target - p) < .002) p = target; draw(); raf = p === target || dragging ? 0 : requestAnimationFrame(tick); }
-    function go(i) { target = clamp(i, 0, LAST); cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); restart(); }
-    $("#next").onclick = () => go(Math.round(p) >= LAST ? 0 : Math.round(p) + 1);
-    const stage = $("#stage"); let x0 = 0, p0 = 0;
-    stage.addEventListener("pointerdown", e => { if (e.target.closest("button")) return; dragging = true; x0 = e.clientX; p0 = p; cancelAnimationFrame(raf); clearInterval(auto); });
-    addEventListener("pointermove", e => { if (!dragging) return; p = clamp(p0 - (e.clientX - x0) / 180, 0, LAST); draw(); });
-    addEventListener("pointerup", () => { if (!dragging) return; dragging = false; go(Math.round(p)); });
-    let auto; const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    function restart() { clearInterval(auto); if (!still) auto = setInterval(() => go(Math.round(p) >= LAST ? 0 : Math.round(p) + 1), 3800); }
-    draw(); restart();
 
-    /* screenshots carousel (Play Store style) + lightbox */
-    const track = $("#track"), arrL = $("#arrL"), arrR = $("#arrR");
-    const SHOTS = [];
-    function addShot(name, src) {
-      const i = SHOTS.push([name, src]) - 1;
-      const b = document.createElement("button"); b.type = "button"; b.className = "sh"; b.setAttribute("aria-label", "Open screenshot: " + name); b.title = name;
-      const img = new Image(); img.alt = name; img.loading = "lazy"; load(img, src.s, () => { b.remove(); edge(); });
-      b.append(img); b.onclick = () => openLb(i, b); track.append(b);
-    }
-    function edge() { arrL.hidden = track.scrollLeft < 8; arrR.hidden = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8; }
-    track.addEventListener("scroll", edge, { passive: true }); addEventListener("resize", edge);
-    arrL.onclick = () => track.scrollBy({ left: -track.clientWidth * .8, behavior: "smooth" });
-    arrR.onclick = () => track.scrollBy({ left: track.clientWidth * .8, behavior: "smooth" });
+/* images for the steps and download section come from the same numbered screenshots folder */
+document.querySelectorAll("[data-shot]").forEach(box => {
+  const img = new Image(); img.alt = box.dataset.alt || "Forkly screen"; img.loading = "lazy";
+  load(img, CONFIG.screenshotExts.map(e => `${CONFIG.screenshots}/${box.dataset.shot}.${e}`), () => img.remove());
+  box.append(img);
+});
+loadShots();
 
-    // Finds 1.png, 2.png, 3.png ... in the screenshots folder (any listed extension) and stops at the first missing number.
-    const exts = [...CONFIG.screenshotExts];
-    const probe = n => new Promise(res => {
-      const img = new Image(); let k = 0;
-      const next = () => k >= exts.length ? res(null) : (img.src = `${CONFIG.screenshots}/${n}.${exts[k++]}`);
-      img.onload = () => res(img.src); img.onerror = next; next();
-    });
-    async function loadShots() {
-      const BATCH = 8;
-      for (let start = 1; start <= CONFIG.screenshotsMax; start += BATCH) {
-        const nums = Array.from({ length: Math.min(BATCH, CONFIG.screenshotsMax - start + 1) }, (_, i) => start + i);
-        const urls = await Promise.all(nums.map(probe));
-        for (let i = 0; i < nums.length; i++) {
-          if (!urls[i]) return done();
-          const ext = urls[i].split(".").pop().split("?")[0];
-          exts.sort((a, b) => (b === ext) - (a === ext));
-          addShot(CONFIG.screenshotTitles[nums[i] - 1] || "Screenshot " + nums[i], { s: urls[i], l: urls[i] });
-        }
-        edge();
-      }
-      done();
-    }
-    function done() { if (!SHOTS.length) FALLBACK.forEach(([n, s]) => addShot(n, s)); edge(); }
+/* count-up numbers */
+const count = el => {
+  const to = +el.dataset.to, t0 = performance.now();
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return el.textContent = to;
+  (function f(t) { const k = Math.min(1, (t - t0) / 1200); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(f); })(t0);
+};
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { io.unobserve(e.target); count(e.target); } }), { threshold: .6 });
+document.querySelectorAll("[data-to]").forEach(n => io.observe(n));
 
-    const lb = $("#lb"), lbImg = $("#lbimg"), lbCap = $("#lbcap"); let cur = 0, opener = null;
-    function show(i) { cur = (i + SHOTS.length) % SHOTS.length; load(lbImg, SHOTS[cur][1].l); lbImg.alt = SHOTS[cur][0]; lbCap.textContent = SHOTS[cur][0]; }
-    function openLb(i, el) { opener = el; show(i); lb.hidden = false; document.body.style.overflow = "hidden"; $("#lbx").focus(); }
-    function closeLb() { lb.hidden = true; document.body.style.overflow = ""; lbImg.removeAttribute("src"); if (opener) opener.focus(); }
-    $("#lbx").onclick = closeLb; $("#lbp").onclick = () => show(cur - 1); $("#lbn").onclick = () => show(cur + 1);
-    lb.addEventListener("click", e => { if (e.target === lb || e.target.tagName === "FIGURE") closeLb(); });
-    addEventListener("keydown", e => {
-      if (lb.hidden) return;
-      if (e.key === "Escape") closeLb();
-      if (e.key === "ArrowRight") show(cur + 1);
-      if (e.key === "ArrowLeft") show(cur - 1);
-    });
-
-    loadShots();
-
-    /* demo video */
-    const vid = $("#video"), v = CONFIG.demoVideo;
-    const yt = v.match(/(?:youtu\.be\/|v=)([\w-]{11})/);
-    if (yt) vid.innerHTML = `<iframe src="https://www.youtube.com/embed/${yt[1]}" title="Forkly demo video" allowfullscreen></iframe>`;
-    else if (v) vid.innerHTML = `<video src="${v}" controls playsinline preload="metadata"></video>`;
-    else vid.innerHTML = `<div class="ph"><b><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></b>Demo video coming soon</div>`;
-  </script>
+/* inline flat illustrations */
+document.querySelectorAll("[data-art]").forEach(e => e.innerHTML = ART[e.dataset.art]);
+</script>
 </body>
-
-</html>
+                                                                                                                                                             </html>
