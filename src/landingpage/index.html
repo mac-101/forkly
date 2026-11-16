@@ -39,7 +39,7 @@ nav .btn{height:46px;padding:0 24px;font-size:16px}
 .cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
 .hero .cta .btn{flex:1 1 230px;max-width:290px}
 .stats{display:flex;justify-content:center;gap:clamp(24px,7vw,80px);margin-top:56px}
-.stat .disc{display:grid;place-items:center;width:84px;height:84px;margin:0 auto 14px;border-radius:50%;background:var(--blush)}
+.stat .disc{display:grid;place-items:center;width:clamp(60px,18vw,84px);height:clamp(60px,18vw,84px);margin:0 auto 14px;border-radius:50%;background:var(--blush)}
 .disc svg{width:34px;height:34px;stroke:var(--red);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .stat b{display:block;font:500 30px/1 "Outfit",sans-serif}
 .stat span{display:block;margin-top:6px;color:var(--mute);font-size:16px}
@@ -49,19 +49,20 @@ nav .btn{height:46px;padding:0 24px;font-size:16px}
 .blob.b{right:0;top:0;width:min(34%,330px);height:300px;background:var(--green);border-radius:40px 40px 40px 160px}
 .blob.c{left:50%;bottom:30px;width:min(70%,640px);height:300px;margin-left:calc(min(70%,640px)/-2);background:var(--blush);border-radius:300px 300px 40px 40px}
 .showhero .stage{position:relative;z-index:1}
-.stage{width:min(440px,100%);margin:0 auto;touch-action:pan-y;user-select:none;cursor:grab}
+.stage{--k:1;width:min(440px,100%);margin:0 auto;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
 .stage:active{cursor:grabbing}
-.wheel{position:relative;height:290px}
-.slide{position:absolute;top:10px;left:50%;width:220px;height:220px;margin-left:-110px;will-change:transform}
-.slide svg{width:100%;height:100%}
-.copy{position:relative;height:132px;margin:8px 16px 0}
-.copy div{position:absolute;inset:0;text-align:center}
-.copy h3{font-size:30px;font-weight:800}.copy p{margin-top:10px;font-size:16px;line-height:1.5;color:#5a5254}
-.dots{display:flex;justify-content:center;gap:8px;margin-top:4px}
-.dots button{width:8px;height:8px;border-radius:4px;border:0;background:#f4bcc2;padding:0;cursor:pointer;transition:width .2s,background .2s}
-.dots button.on{width:26px;background:var(--red)}
-.next{display:flex;width:min(100%,320px);margin:24px auto 0}
-
+.wheel{position:relative;height:calc(290px*var(--k))}
+.slide{position:absolute;top:calc(10px*var(--k));left:50%;width:calc(220px*var(--k));height:calc(220px*var(--k));margin-left:calc(-110px*var(--k));will-change:transform}
+.slide svg{width:100%;height:100%;pointer-events:none}
+.copy{display:grid;margin:8px 16px 0}
+.copy div{grid-area:1/1;text-align:center}
+.copy h3{font-size:clamp(24px,6.5vw,30px)}
+.copy p{margin-top:10px;font-size:16px;line-height:1.5;color:#5a5254}
+.dots{display:flex;justify-content:center;margin-top:4px}
+.dots button{height:28px;padding:0 5px;border:0;background:none;cursor:pointer;display:grid;place-items:center}
+.dots button::before{content:"";width:8px;height:8px;border-radius:4px;background:#f4bcc2;transition:width .2s,background .2s}
+.dots button.on::before{width:26px;background:var(--red)}
+.next{display:flex;width:min(100%,320px);margin:20px auto 0}
 /* sections */
 section{padding:72px 0}
 h2{font-size:clamp(34px,5vw,54px);text-align:center}
@@ -74,14 +75,14 @@ h2{font-size:clamp(34px,5vw,54px);text-align:center}
 .feat:hover{background:#fff;border-color:var(--line);box-shadow:0 18px 34px -22px rgba(60,0,0,.35)}
 .feat .disc{flex:0 0 76px;width:76px;height:76px;border-radius:50%;background:#fff;display:grid;place-items:center}
 .feat h3{font-size:24px}.feat p{margin-top:6px;color:var(--mute);font-size:16px}
-.drive{margin:0 20px;max-width:1060px;margin-inline:auto;text-align:center;padding:52px 28px;border-radius:28px;background:#FFF7F7;border:1px solid #F1BEC4}
+.drive{width:calc(100% - 40px);max-width:1060px;margin:0 auto;text-align:center;padding:52px 28px;border-radius:28px;background:#FFF7F7;border:1px solid #F1BEC4}
 .drive h2{font-size:clamp(30px,4vw,44px)}.drive p{margin:14px auto 28px;max-width:30em}
 .how h2 .sq{display:inline-block}
 .steps{list-style:none;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:48px 28px;margin-top:56px}
 .step{position:relative;flex:1 1 300px;max-width:340px}
 .step .card{background:var(--blush);border-radius:32px;height:360px;padding:30px 34px 0;overflow:hidden}
 .crop{border-radius:22px 22px 0 0;overflow:hidden;background:#f6cfd3;min-height:300px}
-[data-shot] img{display:block;width:100%;height:auto}
+[data-img] img{display:block;width:100%;height:auto}
 .num{position:absolute;top:-16px;left:-8px;z-index:2;width:68px;height:68px;border-radius:50%;background:var(--red);color:#fff;border:7px solid #FDFBFA;display:grid;place-items:center;font:500 28px/1 "Outfit",sans-serif}
 .step h3{margin-top:22px;font-size:28px;font-weight:400}.step p{margin-top:8px;color:var(--mute);font-size:16px}
 .faq .list{max-width:780px;margin:44px auto 0;display:grid;gap:14px}
@@ -125,6 +126,8 @@ footer ul{list-style:none;padding:0;display:grid;gap:14px}footer a{text-decorati
 }
 @media(max-width:860px){nav ul{display:none}.hero{padding-top:44px}.blob.c{display:none}.show{height:380px}}
 @media(max-width:560px){.blob.a,.blob.b{width:38%;height:220px}.dlcard h2{font-size:34px}}
+@media(max-width:860px){footer .grid>div:last-child{grid-column:1/-1}.social a{width:52px;height:52px}.stores .store{flex:1 1 230px;max-width:320px;justify-content:center}}
+@media(max-width:420px){.wrap{padding:0 16px}.btn{padding:0 22px;font-size:16px}.step .card{height:320px;padding:26px 24px 0}.stats{gap:18px}.stat span{font-size:14px}.dlcard{padding-top:44px}.show{height:340px;padding-top:40px}summary{font-size:19px}details{padding:18px 20px}.feat{padding:18px 16px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 /* carousel */
 .shots{background:var(--mist);padding-bottom:64px}
@@ -194,11 +197,11 @@ footer ul{list-style:none;padding:0;display:grid;gap:14px}footer a{text-decorati
 <section class="how" id="how"><div class="wrap">
   <h2>How to <span class="sq">order</span></h2>
   <ol class="steps">
-    <li class="step"><span class="num">1</span><div class="card"><div class="crop" data-shot="6" data-alt="Find a place to eat"></div></div><h3>Find a place to eat</h3><p>Browse by category or search by name.</p></li>
-    <li class="step"><span class="num">2</span><div class="card"><div class="crop" data-shot="7" data-alt="Pick a restaurant"></div></div><h3>Pick a restaurant</h3><p>See its popular dishes and the full menu.</p></li>
-    <li class="step"><span class="num">3</span><div class="card"><div class="crop" data-shot="9" data-alt="Make it yours"></div></div><h3>Make it yours</h3><p>Choose a size, extras and quantity.</p></li>
-    <li class="step"><span class="num">4</span><div class="card"><div class="crop" data-shot="10" data-alt="Check out"></div></div><h3>Check out</h3><p>Review your cart and place the order.</p></li>
-    <li class="step"><span class="num">5</span><div class="card"><div class="crop" data-shot="12" data-alt="Book a table"></div></div><h3>Book a table</h3><p>Let the restaurant know when you’re coming.</p></li>
+    <li class="step"><span class="num">1</span><div class="card"><div class="crop" data-img="step1" data-alt="Find a place to eat"></div></div><h3>Find a place to eat</h3><p>Browse by category or search by name.</p></li>
+    <li class="step"><span class="num">2</span><div class="card"><div class="crop" data-img="step2" data-alt="Pick a restaurant"></div></div><h3>Pick a restaurant</h3><p>See its popular dishes and the full menu.</p></li>
+    <li class="step"><span class="num">3</span><div class="card"><div class="crop" data-img="step3" data-alt="Make it yours"></div></div><h3>Make it yours</h3><p>Choose a size, extras and quantity.</p></li>
+    <li class="step"><span class="num">4</span><div class="card"><div class="crop" data-img="step4" data-alt="Check out"></div></div><h3>Check out</h3><p>Review your cart and place the order.</p></li>
+    <li class="step"><span class="num">5</span><div class="card"><div class="crop" data-img="step5" data-alt="Book a table"></div></div><h3>Book a table</h3><p>Let the restaurant know when you’re coming.</p></li>
   </ol>
 </div></section>
 
@@ -224,7 +227,7 @@ footer ul{list-style:none;padding:0;display:grid;gap:14px}footer a{text-decorati
   </div>
 </div></section>
 
-<div class="wrap"><div class="show"><div class="phone"><div class="ph" data-shot="6" data-alt="Forkly home screen" style="margin:0;border-radius:0"></div></div></div></div>
+<div class="wrap"><div class="show"><div class="phone"><div class="ph" data-img="showcase" data-alt="Forkly home screen" style="margin:0;border-radius:0"></div></div></div></div>
 
 <section class="dl" id="download"><div class="wrap"><div class="dlcard">
   <h2>Download the app now</h2>
@@ -268,6 +271,15 @@ const CONFIG = {
   whatsapp: "",   // digits only with country code, e.g. 2348012345678
   github: "",     // repo link
   demoVideo: "",  // "assets/demo.mp4" or a YouTube link
+  // Which numbered screenshot (1, 2, 3 ...) each spot on the page shows. Change the numbers to match your files.
+  images: {
+    step1: 6,      // "How to order" step 1
+    step2: 7,      // step 2
+    step3: 9,      // step 3
+    step4: 11,     // step 4
+    step5: 10,     // step 5
+    showcase: 5    // the phone in the red block
+  },
   screenshots: "./screens",       // folder with 1.png, 2.png, 3.png ... (up to 100)
   screenshotExts: ["png", "jpg", "jpeg", "webp"],
   screenshotsMax: 100,
@@ -331,38 +343,73 @@ document.querySelectorAll("[data-link]").forEach(a => {
   else { a.classList.add("soon"); a.addEventListener("click", e => { e.preventDefault(); toast("This link is coming soon."); }); }
 });
 /* hero: onboarding slides travelling along an arc */
-const wheel = $("#wheel"), copy = $("#copy"), dots = $("#dots");
-SLIDES.forEach(([k,t,p],i) => {
-  const s = document.createElement("div"); s.className = "slide"; s.innerHTML = ART[k]; wheel.append(s);
-  const c = document.createElement("div"); c.innerHTML = "<h3>"+t+"</h3><p>"+p+"</p>"; copy.append(c);
-  const d = document.createElement("button"); d.type = "button"; d.setAttribute("aria-label","Slide "+(i+1)); d.onclick = () => go(i); dots.append(d);
+const wheel = $("#wheel"), copy = $("#copy"), dots = $("#dots"), stage = $("#stage");
+SLIDES.forEach(([key, title, text], i) => {
+  const s = document.createElement("div"); s.className = "slide"; s.innerHTML = ART[key]; wheel.append(s);
+  const c = document.createElement("div"); c.innerHTML = "<h3>" + title + "</h3><p>" + text + "</p>"; copy.append(c);
+  const d = document.createElement("button"); d.type = "button"; d.setAttribute("aria-label", "Slide " + (i + 1)); d.onclick = () => go(i, true); dots.append(d);
 });
 const slides = [...wheel.children], texts = [...copy.children], dotEls = [...dots.children];
-const R = 230, STEP = .5, LAST = SLIDES.length - 1;
-let p = 0, target = 0, dragging = false, raf = 0;
-const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+const STEP = .5, LAST = SLIDES.length - 1;
+let k = 1, R = 230, p = 0, target = 0, raf = 0, last = 0, auto = 0, resume = 0;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 function draw() {
-  slides.forEach((el,i) => {
+  slides.forEach((el, i) => {
     const d = i - p, a = Math.min(Math.abs(d), 2), th = d * STEP;
-    el.style.transform = `translate(${R*Math.sin(th)}px,${R*(1-Math.cos(th))}px) rotate(${th}rad) scale(${Math.max(.45,1-.28*a)})`;
-    el.style.opacity = Math.max(0, 1 - .65*a);
-    el.style.zIndex = Math.round(10 - a*3);
+    el.style.transform = `translate(${R * Math.sin(th)}px,${R * (1 - Math.cos(th))}px) rotate(${th}rad) scale(${Math.max(.45, 1 - .28 * a)})`;
+    el.style.opacity = Math.max(0, 1 - .65 * a);
+    el.style.zIndex = Math.round(10 - a * 3);
   });
-  texts.forEach((el,i) => { const d = i - p; el.style.opacity = Math.max(0, 1 - Math.abs(d)*2); el.style.transform = `translateY(${d*24}px)`; });
-  const idx = Math.round(p);
-  dotEls.forEach((e,i) => e.classList.toggle("on", i === idx));
-  $("#next").textContent = "Next";
+  texts.forEach((el, i) => { const d = i - p; el.style.opacity = Math.max(0, 1 - Math.abs(d) * 2); el.style.transform = `translateY(${d * 24}px)`; });
+  const idx = clamp(Math.round(p), 0, LAST);
+  dotEls.forEach((e, i) => e.classList.toggle("on", i === idx));
 }
-function tick() { p += (target - p) * .14; if (Math.abs(target - p) < .002) p = target; draw(); raf = p === target || dragging ? 0 : requestAnimationFrame(tick); }
-function go(i) { target = clamp(i, 0, LAST); cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); restart(); }
-$("#next").onclick = () => go(Math.round(p) >= LAST ? 0 : Math.round(p) + 1);
-const stage = $("#stage"); let x0 = 0, p0 = 0;
-stage.addEventListener("pointerdown", e => { if (e.target.closest("button")) return; dragging = true; x0 = e.clientX; p0 = p; cancelAnimationFrame(raf); clearInterval(auto); });
-addEventListener("pointermove", e => { if (!dragging) return; p = clamp(p0 - (e.clientX - x0) / 180, 0, LAST); draw(); });
-addEventListener("pointerup", () => { if (!dragging) return; dragging = false; go(Math.round(p)); });
-let auto; const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-function restart() { clearInterval(auto); if (!still) auto = setInterval(() => go(Math.round(p) >= LAST ? 0 : Math.round(p) + 1), 3800); }
-draw(); restart();
+function fit() { k = Math.min(1, stage.clientWidth / 440); stage.style.setProperty("--k", k); R = 230 * k; draw(); }
+
+// frame-rate independent easing towards `target`
+function tick(t) {
+  const dt = Math.min(48, t - (last || t)); last = t;
+  p += (target - p) * (1 - Math.exp(-dt / 70));
+  if (Math.abs(target - p) < .001) { p = target; raf = 0; last = 0; return draw(); }
+  draw(); raf = requestAnimationFrame(tick);
+}
+function go(i, byUser) {
+  target = clamp(Math.round(i), 0, LAST);
+  if (!raf) { last = 0; raf = requestAnimationFrame(tick); }
+  if (byUser) pause();
+}
+const next = () => go(Math.round(p) >= LAST ? 0 : Math.round(p) + 1);
+function startAuto() { clearInterval(auto); if (!still) auto = setInterval(() => { if (!document.hidden) next(); }, 3800); }
+function pause() { clearInterval(auto); clearTimeout(resume); resume = setTimeout(startAuto, 7000); }   // pause while the visitor is interacting
+$("#next").onclick = () => { next(); pause(); };
+
+// dragging: follows the finger directly, then flicks to the nearest slide
+let dragging = false, pid = 0, x0 = 0, p0 = 0, lx = 0, lt = 0, vx = 0;
+stage.addEventListener("pointerdown", e => {
+  if ((e.pointerType === "mouse" && e.button !== 0) || e.target.closest("button")) return;
+  dragging = true; pid = e.pointerId; stage.setPointerCapture(pid);
+  cancelAnimationFrame(raf); raf = 0;
+  x0 = lx = e.clientX; p0 = p; vx = 0; lt = e.timeStamp; pause();
+});
+stage.addEventListener("pointermove", e => {
+  if (!dragging || e.pointerId !== pid) return;
+  const span = stage.clientWidth * .55;
+  p = clamp(p0 - (e.clientX - x0) / span, -.25, LAST + .25);
+  const dt = e.timeStamp - lt; if (dt > 0) vx = .7 * vx + .3 * ((e.clientX - lx) / dt);
+  lx = e.clientX; lt = e.timeStamp; draw();
+});
+function endDrag() {
+  if (!dragging) return; dragging = false;
+  const flick = clamp(-vx * 250 / (stage.clientWidth * .55), -.9, .9);   // fast flicks travel further
+  go(clamp(p, 0, LAST) + flick, true);
+}
+["pointerup", "pointercancel", "lostpointercapture"].forEach(ev => stage.addEventListener(ev, endDrag));
+stage.tabIndex = 0;
+stage.addEventListener("keydown", e => { if (e.key === "ArrowRight") go(Math.round(p) + 1, true); if (e.key === "ArrowLeft") go(Math.round(p) - 1, true); });
+addEventListener("resize", fit);
+fit(); startAuto();
 
 /* screenshots carousel (Play Store style) + lightbox */
 const track = $("#track"), arrL = $("#arrL"), arrR = $("#arrR");
@@ -417,9 +464,10 @@ addEventListener("keydown", e => {
 
 
 /* images for the steps and download section come from the same numbered screenshots folder */
-document.querySelectorAll("[data-shot]").forEach(box => {
+document.querySelectorAll("[data-img]").forEach(box => {
+  const n = CONFIG.images[box.dataset.img]; if (!n) return;
   const img = new Image(); img.alt = box.dataset.alt || "Forkly screen"; img.loading = "lazy";
-  load(img, CONFIG.screenshotExts.map(e => `${CONFIG.screenshots}/${box.dataset.shot}.${e}`), () => img.remove());
+  load(img, CONFIG.screenshotExts.map(e => `${CONFIG.screenshots}/${n}.${e}`), () => img.remove());
   box.append(img);
 });
 loadShots();
@@ -437,4 +485,4 @@ document.querySelectorAll("[data-to]").forEach(n => io.observe(n));
 document.querySelectorAll("[data-art]").forEach(e => e.innerHTML = ART[e.dataset.art]);
 </script>
 </body>
-                                                                                                                                                             </html>
+ </html>
